@@ -303,18 +303,31 @@ def inject_css():
         [data-testid="stAppToolbar"] svg path[fill="none"]{
           fill: none !important;
         }
+
         /* =========================================================
-           FIX: Labels do MENU da direita (Selectbox/MultiSelect)
-           - Cor cinza escuro como solicitado
-           - Força opacity (Streamlit às vezes deixa "apagado")
+           ✅ FIX (CIRÚRGICO): Labels do MENU da direita (coluna 2)
+           - Corrige "Selecione o Município:", "Selecione o Cenário:" e
+             "Exibir Camadas Atingidas:" que estavam quase brancos/apagados
+           - Não altera valores/caixas dos selects
         ========================================================= */
-        .menu-panel [data-testid="stWidgetLabel"],
-        .menu-panel [data-testid="stWidgetLabel"] *,
-        .menu-panel label,
-        .menu-panel label *{
+        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
+        [data-testid="stWidgetLabel"] p,
+        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
+        [data-testid="stWidgetLabel"] span,
+        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
+        div[data-testid="stSelectbox"] label p,
+        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
+        div[data-testid="stMultiSelect"] label p{
           color: #555 !important;
           opacity: 1 !important;
           font-weight: 700 !important;
+        }
+
+        /* fallback para quando o label vem sem <p> */
+        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
+        [data-testid="stWidgetLabel"]{
+          color: #555 !important;
+          opacity: 1 !important;
         }
 
         </style>
@@ -841,8 +854,8 @@ def points_in_polygon(points_gdf: gpd.GeoDataFrame, poly_gdf: gpd.GeoDataFrame) 
 
     minx, miny, maxx, maxy = poly.bounds
     bbox_mask = (
-        (points_gdf.geometry.x >= minx) & (points_gdf.geometry.x <= maxx) &
-        (points_gdf.geometry.y >= miny) & (points_gdf.geometry.y <= maxy)
+            (points_gdf.geometry.x >= minx) & (points_gdf.geometry.x <= maxx) &
+            (points_gdf.geometry.y >= miny) & (points_gdf.geometry.y <= maxy)
     )
     cand = points_gdf.loc[bbox_mask]
     if cand.empty:
@@ -861,22 +874,22 @@ def safe_sheet_name(name: str) -> str:
 
 
 def build_export_df(
-    municipio: str,
-    layers_sel: list,
-    emp_base: dict,
-    edu_base: dict,
-    sau_base: dict,
-    show_delta: bool,
-    cenario_nome: str | None,
-    emp_imp: dict | None = None,
-    edu_imp: dict | None = None,
-    sau_imp: dict | None = None,
-    delta_layers: dict | None = None,
-    gdf_edu_total: gpd.GeoDataFrame | None = None,
-    gdf_edu_imp: gpd.GeoDataFrame | None = None,
-    gdf_sau_total: gpd.GeoDataFrame | None = None,
-    gdf_sau_imp: gpd.GeoDataFrame | None = None,
-    **_ignored,
+        municipio: str,
+        layers_sel: list,
+        emp_base: dict,
+        edu_base: dict,
+        sau_base: dict,
+        show_delta: bool,
+        cenario_nome: str | None,
+        emp_imp: dict | None = None,
+        edu_imp: dict | None = None,
+        sau_imp: dict | None = None,
+        delta_layers: dict | None = None,
+        gdf_edu_total: gpd.GeoDataFrame | None = None,
+        gdf_edu_imp: gpd.GeoDataFrame | None = None,
+        gdf_sau_total: gpd.GeoDataFrame | None = None,
+        gdf_sau_imp: gpd.GeoDataFrame | None = None,
+        **_ignored,
 ) -> pd.DataFrame:
     layers_sel = layers_sel or []
     if delta_layers is None:
@@ -1255,13 +1268,13 @@ def build_map(center, zoom, layers_to_show, gdf_emp=None, gdf_edu=None, gdf_sau=
 # SIDEBAR — PAINEL DE IMPACTO
 # =========================
 def render_impact_sidebar(
-    emp_m, edu_m, sau_m,
-    title_total: str,
-    show_delta=False,
-    base=None,
-    delta_layers=None,
-    gdf_edu_total=None,
-    gdf_edu_imp=None,
+        emp_m, edu_m, sau_m,
+        title_total: str,
+        show_delta=False,
+        base=None,
+        delta_layers=None,
+        gdf_edu_total=None,
+        gdf_edu_imp=None,
 ):
     if delta_layers is None:
         delta_layers = {"Empresas": True, "Educação": True, "Saúde": True}
@@ -1461,7 +1474,6 @@ col_map, col_menu = st.columns([5.15, 1.35], gap="small")
 
 # MENU (direita)
 with col_menu:
-    st.markdown('<div class="menu-panel">', unsafe_allow_html=True)
     BID_LOGO = APP_DIR / "BID.png"
     GPEA_LOGO = APP_DIR / "GPEa.png"
 
@@ -1582,8 +1594,6 @@ with col_menu:
         st.session_state["filtro_tipo_saude"] = "(todas)"
 
     st.markdown("---")
-
-    st.markdown("</div>", unsafe_allow_html=True)
 
 layers = st.session_state.get("layers_multiselect", []) or []
 
@@ -1757,7 +1767,6 @@ else:
 # BOTÃO DE DOWNLOAD (FINAL DO MENU) — ESTÁVEL E SEM TRAVAR
 # =========================
 with col_menu:
-    st.markdown('<div class="menu-panel">', unsafe_allow_html=True)
     mun_sel = st.session_state.selected_mun
     cen_sel = st.session_state.selected_cenario
     layers_sel = st.session_state.get("layers_multiselect", []) or []
@@ -1835,4 +1844,3 @@ with col_menu:
             )
         else:
             st.info("Ajuste filtros/cenário/camadas para gerar o arquivo.")
-    st.markdown("</div>", unsafe_allow_html=True)
