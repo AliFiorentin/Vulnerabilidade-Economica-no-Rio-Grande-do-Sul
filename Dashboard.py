@@ -145,13 +145,14 @@ def inject_css():
         """
         <style>
         /* =========================================================
-           ✅ FORÇAR TEMA CLARO (LIGHT) — sem “quebrar” widgets
+           ✅ FORÇAR LIGHT (SEM ALTERAR SEU MENU)
+           - Deixa o app light mesmo com sistema dark
         ========================================================= */
         :root { color-scheme: light !important; }
         html, body, .stApp { background:#fff !important; color:#000 !important; }
 
         /* =========================================================
-           Layout (SEU CSS)
+           ✅ SEU CSS ORIGINAL (MANTIDO)
         ========================================================= */
         .block-container { padding-top: 2.1rem !important; padding-bottom: 0.9rem !important; padding-left: 1.0rem !important; padding-right: 1.0rem !important; }
         h1 { margin:0 !important; line-height:1.10 !important; }
@@ -240,66 +241,13 @@ def inject_css():
           white-space:nowrap;
         }
 
-        /* =========================================================
-           ✅ FIX 1: Só os TÍTULOS/LABELS dos widgets do menu (MAIN)
-           (não mexe no restante dos textos do app)
-        ========================================================= */
-        /* Streamlit pode renderizar o título do widget como <label> OU como bloco stWidgetLabel.
-           Então cobrimos os dois formatos, e também o <p>/<span> interno.
-           Resultado: só esses títulos ficam escuros; nada mais.
-        */
-        div[data-testid="stAppViewContainer"] .main div[data-testid="stSelectbox"] label,
-        div[data-testid="stAppViewContainer"] .main div[data-testid="stSelectbox"] label p,
-        div[data-testid="stAppViewContainer"] .main div[data-testid="stSelectbox"] [data-testid="stWidgetLabel"],
-        div[data-testid="stAppViewContainer"] .main div[data-testid="stSelectbox"] [data-testid="stWidgetLabel"] p,
-        div[data-testid="stAppViewContainer"] .main div[data-testid="stSelectbox"] [data-testid="stWidgetLabel"] span,
-        div[data-testid="stAppViewContainer"] .main div[data-testid="stMultiSelect"] label,
-        div[data-testid="stAppViewContainer"] .main div[data-testid="stMultiSelect"] label p,
-        div[data-testid="stAppViewContainer"] .main div[data-testid="stMultiSelect"] [data-testid="stWidgetLabel"],
-        div[data-testid="stAppViewContainer"] .main div[data-testid="stMultiSelect"] [data-testid="stWidgetLabel"] p,
-        div[data-testid="stAppViewContainer"] .main div[data-testid="stMultiSelect"] [data-testid="stWidgetLabel"] span{
-          color:#111 !important;
-          opacity: 1 !important;
-          font-weight: 700 !important;
-        }
-
-        /* =========================================================
-           ✅ FIX 2: Selects/MultiSelect com tema claro (sem “caixa preta”)
-        ========================================================= */
-        /* Caixa do select (área visível) */
-        div[data-testid="stAppViewContainer"] .main div[data-baseweb="select"] > div{
+        div[data-baseweb="select"] > div{
           background:#fff !important;
-          color:#111 !important;
+          color:#000 !important;
           border: 1px solid #d9d9d9 !important;
           box-shadow: none !important;
         }
 
-        /* Texto dentro do combobox */
-        div[data-testid="stAppViewContainer"] .main div[role="combobox"]{
-          background:#fff !important;
-          color:#111 !important;
-        }
-        div[data-testid="stAppViewContainer"] .main div[role="combobox"] *{
-          color:#111 !important;
-        }
-
-        /* Ícone setinha do select */
-        div[data-testid="stAppViewContainer"] .main div[data-baseweb="select"] svg{
-          color:#111 !important;
-          fill: currentColor !important;
-        }
-
-        /* Dropdown (lista que abre) — BaseWeb popover é fora do .main, então é global,
-           mas é seguro: só afeta listas/itens (não o header) */
-        div[data-baseweb="popover"]{
-          background:#fff !important;
-          color:#111 !important;
-        }
-        div[data-baseweb="popover"] *{
-          color:#111 !important;
-        }
-
-        /* MultiSelect tags (mantém seu estilo) */
         div[data-testid="stMultiSelect"] span[data-baseweb="tag"]{
           background: #e8f1ff !important;
           border: 1px solid #2b6fe8 !important;
@@ -314,7 +262,8 @@ def inject_css():
         section[data-testid="stSidebar"] hr { margin-top: 4px !important; margin-bottom: 6px !important; }
 
         /* =========================================================
-           ✅ HEADER/TOOLBAR branco + ícones OK (Share, etc.)
+           ✅ PATCH: HEADER/TOOLBAR BRANCO + ÍCONES OK
+           (SEM mexer no menu)
         ========================================================= */
         [data-testid="stHeader"],
         [data-testid="stToolbar"],
@@ -323,6 +272,7 @@ def inject_css():
           border-bottom: 1px solid #eaeaea !important;
         }
 
+        /* Não use regra global tipo: [data-testid="stHeader"] * { ... } */
         [data-testid="stHeader"] a,
         [data-testid="stHeader"] button,
         [data-testid="stHeader"] [role="button"],
@@ -335,6 +285,7 @@ def inject_css():
           color:#111 !important;
         }
 
+        /* SVGs do header: currentColor + stroke */
         [data-testid="stHeader"] svg,
         [data-testid="stToolbar"] svg,
         [data-testid="stAppToolbar"] svg{
@@ -352,10 +303,35 @@ def inject_css():
         [data-testid="stAppToolbar"] svg path[fill="none"]{
           fill: none !important;
         }
+
+        /* =========================================================
+           ✅ FIX: labels dos widgets no MENU da direita (col_menu)
+           - Corrige “Selecione o Município”, “Selecione o Cenário”,
+             “Exibir Camadas Atingidas” que ficam brancos/apagados
+           - Atua SOMENTE na 2ª coluna do layout (menu)
+        ========================================================= */
+        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
+        div[data-testid="stSelectbox"] [data-testid="stWidgetLabel"] p,
+        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
+        div[data-testid="stMultiSelect"] [data-testid="stWidgetLabel"] p,
+        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
+        div[data-testid="stSelectbox"] label p,
+        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
+        div[data-testid="stMultiSelect"] label p,
+        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
+        div[data-testid="stSelectbox"] [data-testid="stWidgetLabel"],
+        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
+        div[data-testid="stMultiSelect"] [data-testid="stWidgetLabel"]{
+          color: #111 !important;
+          opacity: 1 !important;
+          font-weight: 700 !important;
+        }
         </style>
         """,
         unsafe_allow_html=True,
     )
+
+    # reforço no head do browser (ajuda em alguns navegadores)
     st.markdown('<meta name="color-scheme" content="light">', unsafe_allow_html=True)
 
 
