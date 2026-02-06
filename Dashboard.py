@@ -244,9 +244,22 @@ def inject_css():
            ✅ FIX 1: Só os TÍTULOS/LABELS dos widgets do menu (MAIN)
            (não mexe no restante dos textos do app)
         ========================================================= */
+        /* Streamlit pode renderizar o título do widget como <label> OU como bloco stWidgetLabel.
+           Então cobrimos os dois formatos, e também o <p>/<span> interno.
+           Resultado: só esses títulos ficam escuros; nada mais.
+        */
         div[data-testid="stAppViewContainer"] .main div[data-testid="stSelectbox"] label,
-        div[data-testid="stAppViewContainer"] .main div[data-testid="stMultiSelect"] label{
+        div[data-testid="stAppViewContainer"] .main div[data-testid="stSelectbox"] label p,
+        div[data-testid="stAppViewContainer"] .main div[data-testid="stSelectbox"] [data-testid="stWidgetLabel"],
+        div[data-testid="stAppViewContainer"] .main div[data-testid="stSelectbox"] [data-testid="stWidgetLabel"] p,
+        div[data-testid="stAppViewContainer"] .main div[data-testid="stSelectbox"] [data-testid="stWidgetLabel"] span,
+        div[data-testid="stAppViewContainer"] .main div[data-testid="stMultiSelect"] label,
+        div[data-testid="stAppViewContainer"] .main div[data-testid="stMultiSelect"] label p,
+        div[data-testid="stAppViewContainer"] .main div[data-testid="stMultiSelect"] [data-testid="stWidgetLabel"],
+        div[data-testid="stAppViewContainer"] .main div[data-testid="stMultiSelect"] [data-testid="stWidgetLabel"] p,
+        div[data-testid="stAppViewContainer"] .main div[data-testid="stMultiSelect"] [data-testid="stWidgetLabel"] span{
           color:#111 !important;
+          opacity: 1 !important;
           font-weight: 700 !important;
         }
 
