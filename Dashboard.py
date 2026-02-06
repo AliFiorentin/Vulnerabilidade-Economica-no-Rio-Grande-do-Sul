@@ -303,29 +303,20 @@ def inject_css():
         [data-testid="stAppToolbar"] svg path[fill="none"]{
           fill: none !important;
         }
-
         /* =========================================================
-           ✅ FIX: labels dos widgets no MENU da direita (col_menu)
-           - Corrige “Selecione o Município”, “Selecione o Cenário”,
-             “Exibir Camadas Atingidas” que ficam brancos/apagados
-           - Atua SOMENTE na 2ª coluna do layout (menu)
+           FIX: Labels do MENU da direita (Selectbox/MultiSelect)
+           - Cor cinza escuro como solicitado
+           - Força opacity (Streamlit às vezes deixa "apagado")
         ========================================================= */
-        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
-        div[data-testid="stSelectbox"] [data-testid="stWidgetLabel"] p,
-        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
-        div[data-testid="stMultiSelect"] [data-testid="stWidgetLabel"] p,
-        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
-        div[data-testid="stSelectbox"] label p,
-        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
-        div[data-testid="stMultiSelect"] label p,
-        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
-        div[data-testid="stSelectbox"] [data-testid="stWidgetLabel"],
-        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
-        div[data-testid="stMultiSelect"] [data-testid="stWidgetLabel"]{
-          color: #111 !important;
+        .menu-panel [data-testid="stWidgetLabel"],
+        .menu-panel [data-testid="stWidgetLabel"] *,
+        .menu-panel label,
+        .menu-panel label *{
+          color: #555 !important;
           opacity: 1 !important;
           font-weight: 700 !important;
         }
+
         </style>
         """,
         unsafe_allow_html=True,
@@ -1470,6 +1461,7 @@ col_map, col_menu = st.columns([5.15, 1.35], gap="small")
 
 # MENU (direita)
 with col_menu:
+    st.markdown('<div class="menu-panel">', unsafe_allow_html=True)
     BID_LOGO = APP_DIR / "BID.png"
     GPEA_LOGO = APP_DIR / "GPEa.png"
 
@@ -1590,6 +1582,8 @@ with col_menu:
         st.session_state["filtro_tipo_saude"] = "(todas)"
 
     st.markdown("---")
+
+    st.markdown("</div>", unsafe_allow_html=True)
 
 layers = st.session_state.get("layers_multiselect", []) or []
 
@@ -1763,6 +1757,7 @@ else:
 # BOTÃO DE DOWNLOAD (FINAL DO MENU) — ESTÁVEL E SEM TRAVAR
 # =========================
 with col_menu:
+    st.markdown('<div class="menu-panel">', unsafe_allow_html=True)
     mun_sel = st.session_state.selected_mun
     cen_sel = st.session_state.selected_cenario
     layers_sel = st.session_state.get("layers_multiselect", []) or []
@@ -1840,3 +1835,4 @@ with col_menu:
             )
         else:
             st.info("Ajuste filtros/cenário/camadas para gerar o arquivo.")
+    st.markdown("</div>", unsafe_allow_html=True)
