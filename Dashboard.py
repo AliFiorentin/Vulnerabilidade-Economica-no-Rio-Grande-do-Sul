@@ -12,7 +12,8 @@
 #   * "Registro Atual" virou "Total"
 #   * Coluna separada "Delta" com diferença e porcentagem (Cenário - Total)
 #   * Cenário permanece numérico (bom para análise); Delta é texto: "+123 (+10,5%)"
-# - ✅ TEMA LIGHT FORÇADO + HEADER BRANCO (ícones OK)
+# - ✅ TEMA LIGHT FORÇADO:
+#   * .streamlit/config.toml (base="light") + CSS anti-dark
 # =========================
 
 from pathlib import Path
@@ -56,7 +57,7 @@ GPEA_LOGO = APP_DIR / "GPEa.png"
 
 
 # =========================
-# CAMINHOS (DIRETO NA PASTA DO PROJETO)
+# CAMINHOS (AGORA DIRETO NA PASTA DO PROJETO)
 # =========================
 MUNICIPIOS_DATA = {
     "Lajeado": {
@@ -145,7 +146,7 @@ def is_placeholder(val: str, placeholder: str) -> bool:
 
 
 # =========================
-# UI / THEME + AJUSTES (✅ LIGHT + HEADER WHITE ICONS OK)
+# UI / THEME + AJUSTES (✅ LIGHT FORÇADO)
 # =========================
 def inject_css():
     st.markdown(
@@ -169,51 +170,26 @@ def inject_css():
         }
 
         /* =========================
-           ✅ HEADER / TOOLBAR (Streamlit)
-           Fundo branco + ícones OK (sem quebrar)
+           ✅ BARRA SUPERIOR (HEADER)
+           (A “barra escura” do print)
         ========================= */
-        [data-testid="stHeader"],
-        [data-testid="stToolbar"],
-        [data-testid="stAppToolbar"]{
+        [data-testid="stHeader"]{
           background:#ffffff !important;
           border-bottom: 1px solid #eaeaea !important;
         }
 
-        /* NÃO force cor em tudo (*) — isso quebra alguns ícones.
-           Em vez disso, força cor nos elementos interativos */
-        [data-testid="stHeader"] a,
-        [data-testid="stHeader"] button,
-        [data-testid="stHeader"] [role="button"],
-        [data-testid="stToolbar"] a,
-        [data-testid="stToolbar"] button,
-        [data-testid="stToolbar"] [role="button"],
-        [data-testid="stAppToolbar"] a,
-        [data-testid="stAppToolbar"] button,
-        [data-testid="stAppToolbar"] [role="button"]{
-          color:#111 !important;
+        /* dependendo da versão/build, a toolbar muda de testid */
+        [data-testid="stToolbar"],
+        [data-testid="stAppToolbar"]{
+          background:#ffffff !important;
         }
 
-        /* SVGs (ícones) — cobre fill e stroke */
-        [data-testid="stHeader"] svg,
-        [data-testid="stToolbar"] svg,
-        [data-testid="stAppToolbar"] svg{
-          color:#111 !important;   /* currentColor */
-          opacity: 1 !important;
-        }
-
-        /* alguns ícones usam stroke */
-        [data-testid="stHeader"] svg * ,
-        [data-testid="stToolbar"] svg * ,
-        [data-testid="stAppToolbar"] svg *{
-          stroke:#111 !important;
-          fill: currentColor !important;
-        }
-
-        /* preserve paths sem fill explícito (ícones outline) */
-        [data-testid="stHeader"] svg path[fill="none"],
-        [data-testid="stToolbar"] svg path[fill="none"],
-        [data-testid="stAppToolbar"] svg path[fill="none"]{
-          fill: none !important;
+        /* ícones/textos do header/toolbar */
+        [data-testid="stHeader"] *,
+        [data-testid="stToolbar"] *,
+        [data-testid="stAppToolbar"] *{
+          color:#000 !important;
+          fill:#000 !important;
         }
 
         /* =========================
@@ -370,6 +346,7 @@ def inject_css():
 
     # reforço no head do browser
     st.markdown('<meta name="color-scheme" content="light">', unsafe_allow_html=True)
+
 
 
 # =========================
