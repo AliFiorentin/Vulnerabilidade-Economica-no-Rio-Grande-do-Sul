@@ -45,38 +45,48 @@ except Exception:
 
 
 # =========================
-# CAMINHOS (EXATAMENTE COMO VOCÊ PASSOU)
+# ✅ BASE DIR (SEM DISCO G:)
+# =========================
+APP_DIR = Path(__file__).resolve().parent
+DATA_DIR = APP_DIR / "Dados"
+
+BID_LOGO = APP_DIR / "BID.png"
+GPEA_LOGO = APP_DIR / "GPEa.png"
+
+
+# =========================
+# CAMINHOS (AGORA DIRETO NA PASTA DO PROJETO)
 # =========================
 MUNICIPIOS_DATA = {
     "Lajeado": {
-        "empresas": r"G:\Meu Drive\Dashboard BID\Dados\Lajeado\Empresas.xlsx",
-        "educacao": r"G:\Meu Drive\Dashboard BID\Dados\Lajeado\Escolas.csv",
-        "saude": r"G:\Meu Drive\Dashboard BID\Dados\Lajeado\Saúde.csv",
+        "empresas": str(DATA_DIR / "Lajeado" / "Empresas.xlsx"),
+        "educacao": str(DATA_DIR / "Lajeado" / "Escolas.csv"),
+        "saude": str(DATA_DIR / "Lajeado" / "Saúde.csv"),
     },
     "Porto Alegre": {
-        "empresas": r"G:\Meu Drive\Dashboard BID\Dados\Porto Alegre\Empresas.xlsx",
-        "educacao": r"G:\Meu Drive\Dashboard BID\Dados\Porto Alegre\Escolas.csv",
-        "saude": r"G:\Meu Drive\Dashboard BID\Dados\Porto Alegre\Saúde.csv",
+        "empresas": str(DATA_DIR / "Porto Alegre" / "Empresas.xlsx"),
+        "educacao": str(DATA_DIR / "Porto Alegre" / "Escolas.csv"),
+        "saude": str(DATA_DIR / "Porto Alegre" / "Saúde.csv"),
     },
     "Rio Grande": {
-        "empresas": r"G:\Meu Drive\Dashboard BID\Dados\Rio Grande\Empresas.xlsx",
-        "educacao": r"G:\Meu Drive\Dashboard BID\Dados\Rio Grande\Escolas.csv",
-        "saude": r"G:\Meu Drive\Dashboard BID\Dados\Rio Grande\Saúde.csv",
+        "empresas": str(DATA_DIR / "Rio Grande" / "Empresas.xlsx"),
+        "educacao": str(DATA_DIR / "Rio Grande" / "Escolas.csv"),
+        "saude": str(DATA_DIR / "Rio Grande" / "Saúde.csv"),
     },
 }
 
 CENARIOS = {
     "Lajeado": {
-        "Cenário 27m": r"G:\Meu Drive\Dashboard BID\Dados\Lajeado\Mancha\27m00cm.shp",
-        "Cenário 30m": r"G:\Meu Drive\Dashboard BID\Dados\Lajeado\Mancha\30m00cm.shp",
+        "Cenário 27m": str(DATA_DIR / "Lajeado" / "Mancha" / "27m00cm.shp"),
+        "Cenário 30m": str(DATA_DIR / "Lajeado" / "Mancha" / "30m00cm.shp"),
     },
     "Porto Alegre": {
-        "Cenário ADA": r"G:\Meu Drive\Dashboard BID\Dados\Porto Alegre\Mancha\enchente_poa_intersects.shp",
+        "Cenário ADA": str(DATA_DIR / "Porto Alegre" / "Mancha" / "enchente_poa_intersects.shp"),
     },
     "Rio Grande": {
-        "Cenário Setembro 2023": r"G:\Meu Drive\Dashboard BID\Dados\Rio Grande\Mancha\CEN_SET2023.shp",
-        "Cenário Maio 2024": r"G:\Meu Drive\Dashboard BID\Dados\Rio Grande\Mancha\CEN_MAI2024.shp",
-        "Cenário Maio 2024 + 50%": r"G:\Meu Drive\Dashboard BID\Dados\Rio Grande\Mancha\CEN_MAI24_MAIS60CM.shp",
+        "Cenário Setembro 2023": str(DATA_DIR / "Rio Grande" / "Mancha" / "CEN_SET2023.shp"),
+        "Cenário Maio 2024": str(DATA_DIR / "Rio Grande" / "Mancha" / "CEN_MAI2024.shp"),
+        "Cenário Maio 2024 + 50%": str(DATA_DIR / "Rio Grande" / "Mancha" / "CEN_MAI24_MAIS60CM.shp"),
     },
 }
 
@@ -473,21 +483,6 @@ def _is_currency_indicator(indicador: str) -> bool:
     return ("(r$)" in indicador) or ("massa salarial" in indicador) or ("média salarial" in indicador) or ("media salarial" in indicador)
 
 
-def _fmt_excel_val(indicador: str, x) -> str:
-    if x is None or (isinstance(x, (float, np.floating)) and np.isnan(x)):
-        return ""
-    try:
-        fx = float(x)
-    except Exception:
-        return ""
-
-    if _is_currency_indicator(indicador):
-        return f"R$ {_pt_number(fx, 2)}"
-    if abs(fx - int(fx)) < 1e-9:
-        return _pt_number(int(fx), 0)
-    return _pt_number(fx, 2)
-
-
 def _fmt_delta_cell(indicador: str, total_val, scen_val) -> str:
     """Delta = Cenário - Total, com % vs Total: '+123 (+10,5%)'."""
     if scen_val is None or (isinstance(scen_val, (float, np.floating)) and np.isnan(scen_val)):
@@ -519,7 +514,6 @@ def _fmt_delta_cell(indicador: str, total_val, scen_val) -> str:
         diff_txt = f"R$ {_pt_number(abs(diff), 2)}"
         return f"{sign}{diff_txt} ({sign}{pct_txt})" if pct_txt != "n/a" else f"{sign}{diff_txt} (n/a)"
     else:
-        # inteiro se possível
         if abs(diff - int(diff)) < 1e-9:
             diff_txt = _pt_number(int(abs(diff)), 0)
         else:
@@ -954,7 +948,6 @@ def export_df_to_xlsx_bytes(df: pd.DataFrame, sheet_name: str = "Tabela") -> byt
     value_cols = [c for c in df.columns if c not in ("Município", "Camada", "Indicador")]
     df2 = df.copy()
 
-    # Converte apenas colunas numéricas (Total e Cenário). Delta é texto.
     numeric_cols = [c for c in value_cols if str(c).strip().lower() != "delta"]
     for c in numeric_cols:
         df2[c] = pd.to_numeric(df2[c], errors="coerce")
@@ -999,7 +992,6 @@ def export_df_to_xlsx_bytes(df: pd.DataFrame, sheet_name: str = "Tabela") -> byt
                 cell.alignment = normal_align
                 continue
 
-            # Delta é texto
             if str(col).strip().lower() == "delta":
                 cell.alignment = normal_align
                 cell.number_format = "General"
@@ -1392,6 +1384,7 @@ try:
     gdf_emp_all, gdf_edu_all, gdf_sau_all = load_all_municipios(MUNICIPIOS_DATA)
 except Exception as e:
     st.error(f"Erro ao carregar dados. Detalhe: {e}")
+    st.info(f"Verifique se a pasta existe: {DATA_DIR}")
     st.stop()
 
 municipios = sorted(list(MUNICIPIOS_DATA.keys()), key=lambda x: x.lower())
@@ -1405,9 +1398,6 @@ col_map, col_menu = st.columns([5.15, 1.35], gap="small")
 
 # MENU (direita)
 with col_menu:
-    BID_LOGO = Path(r"G:\Meu Drive\Dashboard BID\BID.png")
-    GPEA_LOGO = Path(r"G:\Meu Drive\Dashboard BID\GPEa.png")
-
     st.markdown('<div class="menu-logos">', unsafe_allow_html=True)
     cL, cR = st.columns([1, 1], gap="small")
 
