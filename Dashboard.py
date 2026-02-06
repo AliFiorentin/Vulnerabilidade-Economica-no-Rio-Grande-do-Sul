@@ -12,6 +12,8 @@
 #   * "Registro Atual" virou "Total"
 #   * Coluna separada "Delta" com diferença e porcentagem (Cenário - Total)
 #   * Cenário permanece numérico (bom para análise); Delta é texto: "+123 (+10,5%)"
+# - ✅ TEMA LIGHT FORÇADO:
+#   * .streamlit/config.toml (base="light") + CSS anti-dark
 # =========================
 
 from pathlib import Path
@@ -144,13 +146,27 @@ def is_placeholder(val: str, placeholder: str) -> bool:
 
 
 # =========================
-# UI / THEME + AJUSTES
+# UI / THEME + AJUSTES (✅ LIGHT FORÇADO)
 # =========================
 def inject_css():
     st.markdown(
         """
         <style>
-        :root, body, .stApp { background:#fff !important; color:#000 !important; }
+        /* Força esquema de cores LIGHT também no navegador */
+        :root { color-scheme: light !important; }
+        html, body, .stApp {
+          background:#fff !important;
+          color:#000 !important;
+        }
+
+        /* Blindagem extra: se Streamlit marcar data-theme="dark", neutraliza variáveis */
+        [data-theme="dark"]{
+          --background-color: #ffffff !important;
+          --secondary-background-color: #f7f7f7 !important;
+          --text-color: #000000 !important;
+          --primary-color: #111111 !important;
+        }
+
         .block-container { padding-top: 2.1rem !important; padding-bottom: 0.9rem !important; padding-left: 1.0rem !important; padding-right: 1.0rem !important; }
         h1 { margin:0 !important; line-height:1.10 !important; }
 
@@ -261,6 +277,9 @@ def inject_css():
         """,
         unsafe_allow_html=True,
     )
+
+    # reforço adicional no head do browser
+    st.markdown('<meta name="color-scheme" content="light">', unsafe_allow_html=True)
 
 
 # =========================
