@@ -12,8 +12,7 @@
 #   * "Registro Atual" virou "Total"
 #   * Coluna separada "Delta" com diferença e porcentagem (Cenário - Total)
 #   * Cenário permanece numérico (bom para análise); Delta é texto: "+123 (+10,5%)"
-# - ✅ TEMA LIGHT FORÇADO:
-#   * .streamlit/config.toml (base="light") + CSS anti-dark
+# - ✅ TEMA LIGHT FORÇADO + HEADER BRANCO (ícones OK) SEM MUDAR MENU
 # =========================
 
 from pathlib import Path
@@ -47,18 +46,11 @@ except Exception:
 
 
 # =========================
-# ✅ BASE DIR (SEM DISCO G:)
+# CAMINHOS (DIRETO NA PASTA, SEM DISCO G:)
 # =========================
 APP_DIR = Path(__file__).resolve().parent
 DATA_DIR = APP_DIR / "Dados"
 
-BID_LOGO = APP_DIR / "BID.png"
-GPEA_LOGO = APP_DIR / "GPEa.png"
-
-
-# =========================
-# CAMINHOS (AGORA DIRETO NA PASTA DO PROJETO)
-# =========================
 MUNICIPIOS_DATA = {
     "Lajeado": {
         "empresas": str(DATA_DIR / "Lajeado" / "Empresas.xlsx"),
@@ -146,87 +138,40 @@ def is_placeholder(val: str, placeholder: str) -> bool:
 
 
 # =========================
-# UI / THEME + AJUSTES (✅ LIGHT FORÇADO)
+# UI / THEME + AJUSTES
 # =========================
 def inject_css():
     st.markdown(
         """
         <style>
-        /* =========================
-           ✅ FORÇAR LIGHT (GLOBAL)
-        ========================= */
+        /* =========================================================
+           ✅ FORÇAR LIGHT (SEM ALTERAR SEU MENU)
+           - Deixa o app light mesmo com sistema dark
+        ========================================================= */
         :root { color-scheme: light !important; }
-        html, body, .stApp {
-          background:#fff !important;
-          color:#000 !important;
-        }
+        html, body, .stApp { background:#fff !important; color:#000 !important; }
 
-        /* Se Streamlit tentar aplicar dark via data-theme, neutraliza */
-        [data-theme="dark"]{
-          --background-color: #ffffff !important;
-          --secondary-background-color: #f7f7f7 !important;
-          --text-color: #000000 !important;
-          --primary-color: #111111 !important;
-        }
-
-        /* =========================
-           ✅ BARRA SUPERIOR (HEADER)
-           (A “barra escura” do print)
-        ========================= */
-        [data-testid="stHeader"]{
-          background:#ffffff !important;
-          border-bottom: 1px solid #eaeaea !important;
-        }
-
-        /* dependendo da versão/build, a toolbar muda de testid */
-        [data-testid="stToolbar"],
-        [data-testid="stAppToolbar"]{
-          background:#ffffff !important;
-        }
-
-        /* ícones/textos do header/toolbar */
-        [data-testid="stHeader"] *,
-        [data-testid="stToolbar"] *,
-        [data-testid="stAppToolbar"] *{
-          color:#000 !important;
-          fill:#000 !important;
-        }
-
-        /* =========================
-           LAYOUT / ESPAÇAMENTOS
-        ========================= */
-        .block-container {
-          padding-top: 2.1rem !important;
-          padding-bottom: 0.9rem !important;
-          padding-left: 1.0rem !important;
-          padding-right: 1.0rem !important;
-        }
+        /* =========================================================
+           ✅ SEU CSS ORIGINAL (MANTIDO)
+        ========================================================= */
+        .block-container { padding-top: 2.1rem !important; padding-bottom: 0.9rem !important; padding-left: 1.0rem !important; padding-right: 1.0rem !important; }
         h1 { margin:0 !important; line-height:1.10 !important; }
 
         section[data-testid="stSidebar"][aria-expanded="true"] + div div[data-testid="stAppViewContainer"] .main .block-container{
           padding-left: 1.0rem !important;
           padding-right: 1.0rem !important;
         }
-
-        /* =========================
-           SIDEBAR (360px)
-        ========================= */
         section[data-testid="stSidebar"][aria-expanded="true"]{
-          width: 360px !important;
-          min-width: 360px !important;
-          max-width: 360px !important;
+          width: 360px !important; min-width: 360px !important; max-width: 360px !important;
           background:#fff !important;
         }
         section[data-testid="stSidebar"][aria-expanded="false"]{
-          width: 0px !important;
-          min-width: 0px !important;
-          max-width: 0px !important;
+          width: 0px !important; min-width: 0px !important; max-width: 0px !important;
           overflow: hidden !important;
         }
         section[data-testid="stSidebar"] * { color:#000 !important; }
         section[data-testid="stSidebar"] div[data-testid="stSidebarContent"]{ padding-top: 0.2rem !important; }
 
-        /* Caixa do menu da direita (2ª coluna) */
         .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2) > div[data-testid="stVerticalBlock"]{
           border: 2px solid #111 !important;
           border-radius: 12px !important;
@@ -236,14 +181,8 @@ def inject_css():
           overflow-y: auto !important;
         }
 
-        .menu-title{
-          font-size:22px;
-          font-weight:800;
-          margin:8px 0 10px 0;
-          text-align:center;
-        }
+        .menu-title{ font-size:22px; font-weight:800; margin:8px 0 10px 0; text-align:center; }
 
-        /* Logos sem borda */
         div[data-testid="stImage"], div[data-testid="stImage"] * , div[data-testid="stImage"] img{
           border: 0 !important;
           outline: 0 !important;
@@ -252,23 +191,11 @@ def inject_css():
           border-radius: 0 !important;
         }
         .menu-logos{ padding-top:12px !important; }
-        .menu-logos, .menu-logos *{
-          border:0 !important;
-          outline:0 !important;
-          box-shadow:none !important;
-          background:transparent !important;
-        }
+        .menu-logos, .menu-logos *{ border:0 !important; outline:0 !important; box-shadow:none !important; background:transparent !important; }
         .menu-logos div[data-testid="stVerticalBlock"],
         .menu-logos div[data-testid="stHorizontalBlock"],
-        .menu-logos div {
-          border: 0 !important;
-          outline: 0 !important;
-          box-shadow: none !important;
-        }
+        .menu-logos div { border: 0 !important; outline: 0 !important; box-shadow: none !important; }
 
-        /* =========================
-           TÍTULOS / KPI
-        ========================= */
         .sb-title{ font-size: 30px; font-weight: 900; margin: -24px 0 4px 0; }
         .sb-total{ font-size: 14px; font-weight: 700; margin: 0 0 8px 0; }
 
@@ -314,9 +241,6 @@ def inject_css():
           white-space:nowrap;
         }
 
-        /* =========================
-           SELECTS / TAGS
-        ========================= */
         div[data-baseweb="select"] > div{
           background:#fff !important;
           color:#000 !important;
@@ -334,19 +258,58 @@ def inject_css():
         }
         div[data-testid="stMultiSelect"] span[data-baseweb="tag"] svg{ fill: #1f5fd6 !important; }
 
-        /* =========================
-           GAPS / HR
-        ========================= */
         div[data-testid="stHorizontalBlock"]{ gap: 0.75rem !important; }
         section[data-testid="stSidebar"] hr { margin-top: 4px !important; margin-bottom: 6px !important; }
+
+        /* =========================================================
+           ✅ PATCH: HEADER/TOOLBAR BRANCO + ÍCONES OK
+           (SEM mexer no menu)
+        ========================================================= */
+        [data-testid="stHeader"],
+        [data-testid="stToolbar"],
+        [data-testid="stAppToolbar"]{
+          background:#ffffff !important;
+          border-bottom: 1px solid #eaeaea !important;
+        }
+
+        /* Não use regra global tipo: [data-testid="stHeader"] * { ... } */
+        [data-testid="stHeader"] a,
+        [data-testid="stHeader"] button,
+        [data-testid="stHeader"] [role="button"],
+        [data-testid="stToolbar"] a,
+        [data-testid="stToolbar"] button,
+        [data-testid="stToolbar"] [role="button"],
+        [data-testid="stAppToolbar"] a,
+        [data-testid="stAppToolbar"] button,
+        [data-testid="stAppToolbar"] [role="button"]{
+          color:#111 !important;
+        }
+
+        /* SVGs do header: currentColor + stroke */
+        [data-testid="stHeader"] svg,
+        [data-testid="stToolbar"] svg,
+        [data-testid="stAppToolbar"] svg{
+          color:#111 !important;
+          opacity: 1 !important;
+        }
+        [data-testid="stHeader"] svg *,
+        [data-testid="stToolbar"] svg *,
+        [data-testid="stAppToolbar"] svg *{
+          stroke:#111 !important;
+          fill: currentColor !important;
+        }
+        [data-testid="stHeader"] svg path[fill="none"],
+        [data-testid="stToolbar"] svg path[fill="none"],
+        [data-testid="stAppToolbar"] svg path[fill="none"]{
+          fill: none !important;
+        }
         </style>
         """,
         unsafe_allow_html=True,
     )
 
-    # reforço no head do browser
+    # reforço no head do browser (ajuda em alguns navegadores)
     st.markdown('<meta name="color-scheme" content="light">', unsafe_allow_html=True)
-
 
 
 # =========================
@@ -1484,6 +1447,9 @@ col_map, col_menu = st.columns([5.15, 1.35], gap="small")
 
 # MENU (direita)
 with col_menu:
+    BID_LOGO = APP_DIR / "BID.png"
+    GPEA_LOGO = APP_DIR / "GPEa.png"
+
     st.markdown('<div class="menu-logos">', unsafe_allow_html=True)
     cL, cR = st.columns([1, 1], gap="small")
 
