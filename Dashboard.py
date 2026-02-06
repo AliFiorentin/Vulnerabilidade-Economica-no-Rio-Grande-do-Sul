@@ -145,125 +145,42 @@ def inject_css():
         """
         <style>
         /* =========================================================
-           ✅ FORÇAR LIGHT (SEM ALTERAR SEU MENU)
-           - Deixa o app light mesmo com sistema dark
+           FORÇAR LIGHT GLOBAL (SEM ALTERAR ESTILO DO MENU)
         ========================================================= */
         :root { color-scheme: light !important; }
-        html, body, .stApp { background:#fff !important; color:#000 !important; }
+        html, body, .stApp {
+          background:#fff !important;
+          color:#000 !important;
+        }
 
         /* =========================================================
-           ✅ SEU CSS ORIGINAL (MANTIDO)
+           LAYOUT / ESPAÇAMENTOS (SEU CSS ORIGINAL)
         ========================================================= */
-        .block-container { padding-top: 2.1rem !important; padding-bottom: 0.9rem !important; padding-left: 1.0rem !important; padding-right: 1.0rem !important; }
-        h1 { margin:0 !important; line-height:1.10 !important; }
-
-        section[data-testid="stSidebar"][aria-expanded="true"] + div div[data-testid="stAppViewContainer"] .main .block-container{
+        .block-container {
+          padding-top: 2.1rem !important;
+          padding-bottom: 0.9rem !important;
           padding-left: 1.0rem !important;
           padding-right: 1.0rem !important;
         }
+        h1 { margin:0 !important; line-height:1.10 !important; }
+
         section[data-testid="stSidebar"][aria-expanded="true"]{
-          width: 360px !important; min-width: 360px !important; max-width: 360px !important;
+          width: 360px !important;
+          min-width: 360px !important;
+          max-width: 360px !important;
           background:#fff !important;
         }
         section[data-testid="stSidebar"][aria-expanded="false"]{
-          width: 0px !important; min-width: 0px !important; max-width: 0px !important;
+          width: 0px !important;
+          min-width: 0px !important;
+          max-width: 0px !important;
           overflow: hidden !important;
         }
         section[data-testid="stSidebar"] * { color:#000 !important; }
-        section[data-testid="stSidebar"] div[data-testid="stSidebarContent"]{ padding-top: 0.2rem !important; }
-
-        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2) > div[data-testid="stVerticalBlock"]{
-          border: 2px solid #111 !important;
-          border-radius: 12px !important;
-          padding: 14px 12px 12px 12px !important;
-          background:#fff !important;
-          max-height: 680px !important;
-          overflow-y: auto !important;
-        }
-
-        .menu-title{ font-size:22px; font-weight:800; margin:8px 0 10px 0; text-align:center; }
-
-        div[data-testid="stImage"], div[data-testid="stImage"] * , div[data-testid="stImage"] img{
-          border: 0 !important;
-          outline: 0 !important;
-          box-shadow: none !important;
-          background: transparent !important;
-          border-radius: 0 !important;
-        }
-        .menu-logos{ padding-top:12px !important; }
-        .menu-logos, .menu-logos *{ border:0 !important; outline:0 !important; box-shadow:none !important; background:transparent !important; }
-        .menu-logos div[data-testid="stVerticalBlock"],
-        .menu-logos div[data-testid="stHorizontalBlock"],
-        .menu-logos div { border: 0 !important; outline: 0 !important; box-shadow: none !important; }
-
-        .sb-title{ font-size: 30px; font-weight: 900; margin: -24px 0 4px 0; }
-        .sb-total{ font-size: 14px; font-weight: 700; margin: 0 0 8px 0; }
-
-        .sb-section{
-          font-size: 18px;
-          font-weight: 900;
-          margin: 12px 0 8px 0;
-          text-align: center;
-        }
-        .sb-section .sb-ico{
-          display: inline-block;
-          margin-right: 8px;
-          font-size: 18px;
-          line-height: 1;
-          vertical-align: middle;
-        }
-        .sb-subtitle{
-          margin-top: 14px;
-          margin-bottom: 6px;
-          font-weight: 900;
-        }
-
-        .kpi-grid{ display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .kpi-card{
-          border:1px solid #e6e6e6;
-          border-radius:12px;
-          padding:12px;
-          background:#f9f9f9;
-        }
-        .kpi-title{ font-size:12px; font-weight:700; color:#111; margin-bottom:6px; }
-        .kpi-value{ font-size:18px; font-weight:800; color:#000; line-height:1.1; }
-        .kpi-sub{ font-size:12px; color:#333; margin-top:6px; }
-
-        .kpi-ref{
-          font-size:12px;
-          font-weight:900;
-          margin-top:6px;
-          color:#222;
-        }
-        .kpi-ref .pct{
-          color:#555;
-          font-weight:900;
-          white-space:nowrap;
-        }
-
-        div[data-baseweb="select"] > div{
-          background:#fff !important;
-          color:#000 !important;
-          border: 1px solid #d9d9d9 !important;
-          box-shadow: none !important;
-        }
-
-        div[data-testid="stMultiSelect"] span[data-baseweb="tag"]{
-          background: #e8f1ff !important;
-          border: 1px solid #2b6fe8 !important;
-        }
-        div[data-testid="stMultiSelect"] span[data-baseweb="tag"] span{
-          color: #1f5fd6 !important;
-          font-weight: 800 !important;
-        }
-        div[data-testid="stMultiSelect"] span[data-baseweb="tag"] svg{ fill: #1f5fd6 !important; }
-
-        div[data-testid="stHorizontalBlock"]{ gap: 0.75rem !important; }
-        section[data-testid="stSidebar"] hr { margin-top: 4px !important; margin-bottom: 6px !important; }
 
         /* =========================================================
-           ✅ PATCH: HEADER/TOOLBAR BRANCO + ÍCONES OK
-           (SEM mexer no menu)
+           HEADER / TOOLBAR — BRANCO + ÍCONES OK
+           (NÃO ALTERA MENU)
         ========================================================= */
         [data-testid="stHeader"],
         [data-testid="stToolbar"],
@@ -272,7 +189,6 @@ def inject_css():
           border-bottom: 1px solid #eaeaea !important;
         }
 
-        /* Não use regra global tipo: [data-testid="stHeader"] * { ... } */
         [data-testid="stHeader"] a,
         [data-testid="stHeader"] button,
         [data-testid="stHeader"] [role="button"],
@@ -285,7 +201,6 @@ def inject_css():
           color:#111 !important;
         }
 
-        /* SVGs do header: currentColor + stroke */
         [data-testid="stHeader"] svg,
         [data-testid="stToolbar"] svg,
         [data-testid="stAppToolbar"] svg{
@@ -303,12 +218,38 @@ def inject_css():
         [data-testid="stAppToolbar"] svg path[fill="none"]{
           fill: none !important;
         }
+
+        /* =========================================================
+           🔥 FIX DEFINITIVO: LABELS DO MENU (COL_MENU)
+           - Só texto
+           - Só no MAIN
+           - NÃO altera fundo, cards ou selects
+        ========================================================= */
+        div[data-testid="stAppViewContainer"] .main label {
+          color:#111 !important;
+          font-weight: 600 !important;
+        }
+
+        div[data-testid="stAppViewContainer"] .main .stMarkdown,
+        div[data-testid="stAppViewContainer"] .main .stMarkdown p,
+        div[data-testid="stAppViewContainer"] .main .stMarkdown span,
+        div[data-testid="stAppViewContainer"] .main p,
+        div[data-testid="stAppViewContainer"] .main span {
+          color:#111 !important;
+        }
+
+        /* textos auxiliares */
+        div[data-testid="stAppViewContainer"] .main .stCaption,
+        div[data-testid="stAppViewContainer"] .main small {
+          color:#333 !important;
+        }
+
         </style>
         """,
         unsafe_allow_html=True,
     )
 
-    # reforço no head do browser (ajuda em alguns navegadores)
+    # reforço para navegadores
     st.markdown('<meta name="color-scheme" content="light">', unsafe_allow_html=True)
 
 
