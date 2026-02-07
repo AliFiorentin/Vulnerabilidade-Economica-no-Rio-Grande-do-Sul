@@ -121,6 +121,25 @@ def is_placeholder(val: str, placeholder: str) -> bool:
 
 
 # =========================
+# LOGOS (ROBUSTO)
+# =========================
+def find_logo(app_dir: Path, names: list[str], contains: str | None = None) -> Path | None:
+    # tenta nomes exatos
+    for n in names:
+        p = app_dir / n
+        if p.exists():
+            return p
+
+    # fallback: procura por substring (case-insensitive)
+    if contains:
+        for ext in ("*.png", "*.PNG", "*.jpg", "*.JPG", "*.jpeg", "*.JPEG", "*.webp", "*.WEBP"):
+            for p in app_dir.glob(ext):
+                if contains.lower() in p.name.lower():
+                    return p
+    return None
+
+
+# =========================
 # UI / THEME + AJUSTES
 # =========================
 def inject_css():
@@ -256,6 +275,7 @@ def inject_css():
           border-bottom: 1px solid #eaeaea !important;
         }
 
+        /* Não use regra global tipo: [data-testid="stHeader"] * { ... } */
         [data-testid="stHeader"] a,
         [data-testid="stHeader"] button,
         [data-testid="stHeader"] [role="button"],
@@ -268,6 +288,7 @@ def inject_css():
           color:#111 !important;
         }
 
+        /* SVGs do header: currentColor + stroke */
         [data-testid="stHeader"] svg,
         [data-testid="stToolbar"] svg,
         [data-testid="stAppToolbar"] svg{
@@ -287,66 +308,58 @@ def inject_css():
         }
 
         /* =========================================================
-           ✅ FIX COMPLETO — TEXTO DO MULTISELECT (CAMADAS)
-           Corrige branco no texto (placeholder + selecionados)
+           ✅ FIX DEFINITIVO — MULTISELECT (BaseWeb portal + dropdown)
+           Resolve:
+           - placeholder branco
+           - texto selecionado branco
+           - dropdown escuro/preto (portal)
         ========================================================= */
 
-        /* Área inteira do multiselect */
-        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
-        div[data-testid="stMultiSelect"]{
-          color:#111 !important;
+        /* Controle do multiselect (caixa) */
+        div[data-testid="stMultiSelect"] [data-baseweb="select"]{
+          background:#fff !important;
         }
 
-        /* Caixa principal (select / combobox) */
-        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
-        div[data-testid="stMultiSelect"] [data-baseweb="select"],
-        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
-        div[data-testid="stMultiSelect"] div[role="combobox"]{
+        /* Texto dentro da caixa (valor/seleção) */
+        div[data-testid="stMultiSelect"] [data-baseweb="select"] *{
+          color:#111 !important;
+          -webkit-text-fill-color:#111 !important;
+          opacity: 1 !important;
+        }
+
+        /* Placeholder (cinza legível) */
+        div[data-testid="stMultiSelect"] [data-baseweb="select"] [class*="Placeholder"],
+        div[data-testid="stMultiSelect"] [data-baseweb="select"] [class*="placeholder"],
+        div[data-testid="stMultiSelect"] [data-baseweb="select"] input::placeholder{
+          color:#666 !important;
+          -webkit-text-fill-color:#666 !important;
+          opacity: 1 !important;
+        }
+
+        /* Dropdown (renderiza em portal/popover fora do container) */
+        div[data-baseweb="popover"]{
+          background:#fff !important;
+        }
+        div[data-baseweb="popover"] [role="listbox"]{
           background:#fff !important;
           color:#111 !important;
-          -webkit-text-fill-color:#111 !important;
-          opacity:1 !important;
+          border: 1px solid #d9d9d9 !important;
         }
-
-        /* Texto do VALOR selecionado (SingleValue/Value) */
-        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
-        div[data-testid="stMultiSelect"] [class*="SingleValue"],
-        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
-        div[data-testid="stMultiSelect"] [class*="Value"]{
+        div[data-baseweb="popover"] [role="option"]{
+          background:#fff !important;
+          color:#111 !important;
+        }
+        div[data-baseweb="popover"] [role="option"]:hover{
+          background:#f2f2f2 !important;
+        }
+        div[data-baseweb="popover"] [aria-selected="true"]{
+          background:#e8f1ff !important;
+          color:#111 !important;
+        }
+        div[data-baseweb="popover"] [role="option"] *{
           color:#111 !important;
           -webkit-text-fill-color:#111 !important;
-          opacity:1 !important;
-        }
-
-        /* Placeholder quando vazio */
-        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
-        div[data-testid="stMultiSelect"] [class*="Placeholder"],
-        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
-        div[data-testid="stMultiSelect"] [class*="placeholder"]{
-          color:#666 !important;
-          -webkit-text-fill-color:#666 !important;
-          opacity:1 !important;
-        }
-
-        /* Input interno */
-        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
-        div[data-testid="stMultiSelect"] input{
-          color:#111 !important;
-          -webkit-text-fill-color:#111 !important;
-          caret-color:#111 !important;
-          opacity:1 !important;
-        }
-        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
-        div[data-testid="stMultiSelect"] input::placeholder{
-          color:#666 !important;
-          -webkit-text-fill-color:#666 !important;
-          opacity:1 !important;
-        }
-
-        /* Segurança extra: qualquer texto dentro do multiselect */
-        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
-        div[data-testid="stMultiSelect"] *{
-          -webkit-text-fill-color: inherit !important;
+          opacity: 1 !important;
         }
 
         </style>
@@ -1493,19 +1506,22 @@ col_map, col_menu = st.columns([5.15, 1.35], gap="small")
 
 # MENU (direita)
 with col_menu:
-    BID_LOGO = APP_DIR / "BID.png"
-    GPEA_LOGO = APP_DIR / "GPEa.png"
+    # ✅ logos robustos (não depende de nome exato)
+    BID_LOGO = find_logo(APP_DIR, ["BID.png", "bid.png", "BID.PNG", "bid.PNG"], contains="bid")
+    GPEA_LOGO = find_logo(APP_DIR, ["GPEa.png", "GPEA.png", "gpea.png", "GPEa.PNG", "GPEA.PNG"], contains="gpea")
 
     st.markdown('<div class="menu-logos">', unsafe_allow_html=True)
     cL, cR = st.columns([1, 1], gap="small")
 
     with cL:
-        if BID_LOGO.exists():
+        if BID_LOGO:
             st.image(str(BID_LOGO), width=170)
 
     with cR:
-        if GPEA_LOGO.exists():
+        if GPEA_LOGO:
             st.image(str(GPEA_LOGO), width=190)
+        else:
+            st.caption("⚠️ Logo GPEa não encontrada na pasta do app.")
 
     st.markdown("</div>", unsafe_allow_html=True)
     st.markdown('<div class="menu-title">Menu de Seleção</div>', unsafe_allow_html=True)
