@@ -302,24 +302,27 @@ def inject_css():
           fill: none !important;
         }
 
-
         /* =========================================================
-           FIX: TÍTULOS (labels) do MENU da direita (2ª coluna)
-           “Selecione o Município:”, “Selecione o Cenário:”, “Exibir Camadas Atingidas:”
-           - força cinza escuro + opacity 1
-           - NÃO altera os selects (apenas os títulos)
+           ✅ FIX: TÍTULOS (labels) DO MENU DA DIREITA
+           (st.selectbox / st.multiselect) estavam brancos e sumindo no fundo branco
+           - Mira exatamente a 2ª coluna (col_menu) e seus widget labels
         ========================================================= */
-        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2) [data-testid="stWidgetLabel"] p,
-        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2) [data-testid="stWidgetLabel"] span,
-        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2) label p,
-        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2) label span,
-        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2) .stSelectbox label p,
-        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2) .stMultiSelect label p {
-          color: #555 !important;
+        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2) > div[data-testid="stVerticalBlock"]
+        [data-testid="stWidgetLabel"],
+        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2) > div[data-testid="stVerticalBlock"]
+        [data-testid="stWidgetLabel"] p,
+        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2) > div[data-testid="stVerticalBlock"]
+        [data-testid="stWidgetLabel"] span,
+        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2) > div[data-testid="stVerticalBlock"]
+        label,
+        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2) > div[data-testid="stVerticalBlock"]
+        label p,
+        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2) > div[data-testid="stVerticalBlock"]
+        label span{
+          color: #555 !important;   /* cinza escuro */
           opacity: 1 !important;
           font-weight: 700 !important;
         }
-
 </style>
         """,
         unsafe_allow_html=True,
