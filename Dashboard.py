@@ -129,6 +129,7 @@ def inject_css():
         <style>
         /* =========================================================
            ✅ FORÇAR LIGHT (SEM ALTERAR SEU MENU)
+           - Deixa o app light mesmo com sistema dark
         ========================================================= */
         :root { color-scheme: light !important; }
         html, body, .stApp { background:#fff !important; color:#000 !important; }
@@ -246,6 +247,7 @@ def inject_css():
 
         /* =========================================================
            ✅ PATCH: HEADER/TOOLBAR BRANCO + ÍCONES OK
+           (SEM mexer no menu)
         ========================================================= */
         [data-testid="stHeader"],
         [data-testid="stToolbar"],
@@ -254,6 +256,7 @@ def inject_css():
           border-bottom: 1px solid #eaeaea !important;
         }
 
+        /* Não use regra global tipo: [data-testid="stHeader"] * { ... } */
         [data-testid="stHeader"] a,
         [data-testid="stHeader"] button,
         [data-testid="stHeader"] [role="button"],
@@ -266,6 +269,7 @@ def inject_css():
           color:#111 !important;
         }
 
+        /* SVGs do header: currentColor + stroke */
         [data-testid="stHeader"] svg,
         [data-testid="stToolbar"] svg,
         [data-testid="stAppToolbar"] svg{
@@ -285,31 +289,31 @@ def inject_css():
         }
 
         /* =========================================================
-           ✅ FIX: PLACEHOLDER DO MULTISELECT (só dentro da caixa)
-           - força o texto "Selecione a(s) Camada(s)" a ficar cinza escuro
-           - NÃO mexe nos labels/títulos fora da caixa
+           ✅ FIX: TEXTO/PLACEHOLDER DO MULTISELECT (CAMADAS) NO MENU
+           - Corrige o texto dentro da caixa quando não há seleção
         ========================================================= */
 
-        /* Escopo: coluna do menu (2ª coluna do horizontal block) */
+        /* 1) Garante texto do multiselect (normal) */
         .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
-        div[data-testid="stMultiSelect"] [role="combobox"]{
-          color:#111 !important; /* texto normal */
-        }
-
-        /* Placeholder do BaseWeb: geralmente é um <div> dentro do combobox */
+        div[data-testid="stMultiSelect"] [data-baseweb="select"],
         .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
-        div[data-testid="stMultiSelect"] [role="combobox"] div{
+        div[data-testid="stMultiSelect"] [data-baseweb="select"] *{
           color:#111 !important;
+          -webkit-text-fill-color:#111 !important;
         }
 
-        /* Quando está vazio, o placeholder costuma ser o "primeiro bloco" dentro do value container */
+        /* 2) PLACEHOLDER (BaseWeb) — ESTE É O QUE ESTAVA FICANDO BRANCO
+              Troque #666 pela cor que você quiser */
         .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
-        div[data-testid="stMultiSelect"] [data-baseweb="select"] > div > div > div > div{
-          color:#666 !important;         /* CINZA do placeholder */
+        div[data-testid="stMultiSelect"] [data-baseweb="select"] [class*="Placeholder"],
+        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
+        div[data-testid="stMultiSelect"] [data-baseweb="select"] [class*="placeholder"]{
+          color:#666 !important;
+          -webkit-text-fill-color:#666 !important;
           opacity: 1 !important;
         }
 
-        /* Se o Streamlit renderizar como input */
+        /* 3) Se renderizar como input, força placeholder do input também */
         .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
         div[data-testid="stMultiSelect"] [data-baseweb="select"] input{
           color:#111 !important;
@@ -318,36 +322,17 @@ def inject_css():
         }
         .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
         div[data-testid="stMultiSelect"] [data-baseweb="select"] input::placeholder{
-          color:#666 !important;         /* CINZA do placeholder */
-          opacity: 1 !important;
-          -webkit-text-fill-color:#666 !important;
-        }
-
-        /* Alguns builds usam classes tipo Placeholder */
-        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
-        div[data-testid="stMultiSelect"] [data-baseweb="select"] [class*='Placeholder']{
           color:#666 !important;
+          -webkit-text-fill-color:#666 !important;
           opacity: 1 !important;
         }
-        
-        /* =========================================================
-        🔥    FIX DEFINITIVO: PLACEHOLDER DO MULTISELECT (BaseWeb)
-                - Corrige APENAS "Selecione a(s) Camada(s)"
-        ========================================================= */
-        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
-        div[data-testid="stMultiSelect"] [data-baseweb="select"]
-        [style*="color"]{
-        color: #555 !important;
-        -webkit-text-fill-color: #555 !important;
-        opacity: 1 !important;
-        }
-
 
         </style>
         """,
         unsafe_allow_html=True,
     )
 
+    # reforço no head do browser (ajuda em alguns navegadores)
     st.markdown('<meta name="color-scheme" content="light">', unsafe_allow_html=True)
 
 
