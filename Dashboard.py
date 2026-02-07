@@ -1,19 +1,3 @@
-# =========================
-# DASHBOARD COMPLETO (RÁPIDO + FLUIDO + MAPA NÃO RECARREGA AO BAIXAR)
-# - Leitura robusta (detecta mojibake e re-lê em UTF-8)
-# - Cache agressivo
-# - Mapa memoizado por assinatura (download não reconstrói)
-# - Saúde:
-#   * Corrige nomes estranhos (AmbulatÃ³rio etc.)
-#   * Profissionais (STAFF_*) no Painel + Popups
-#   * Remove o card "Unidades de Saúde (Total)" do Painel
-#   * Mantém títulos: "Unidades por tipo" e "Profissionais"
-# - Exportação XLSX estável:
-#   * "Registro Atual" virou "Total"
-#   * Coluna separada "Delta" com diferença e porcentagem (Cenário - Total)
-#   * Cenário permanece numérico (bom para análise); Delta é texto: "+123 (+10,5%)"
-# - ✅ TEMA LIGHT FORÇADO + HEADER BRANCO (ícones OK) SEM MUDAR MENU
-# =========================
 
 from pathlib import Path
 import re
@@ -313,6 +297,25 @@ def inject_css():
         .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
         div[data-testid="stMultiSelect"] [data-baseweb="select"] *{
           color:#111 !important;
+          opacity: 1 !important;
+        }
+
+        /* força cor do input/placeholder do multiselect (BaseWeb) */
+        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
+        div[data-testid="stMultiSelect"] [data-baseweb="select"] input{
+          color:#111 !important;
+          -webkit-text-fill-color:#111 !important;
+          opacity: 1 !important;
+        }
+        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
+        div[data-testid="stMultiSelect"] [data-baseweb="select"] input::placeholder{
+          color:#666 !important;
+          opacity: 1 !important;
+          -webkit-text-fill-color:#666 !important;
+        }
+        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
+        div[data-testid="stMultiSelect"] [data-baseweb="select"] [class*='Placeholder']{
+          color:#666 !important;
           opacity: 1 !important;
         }
 
