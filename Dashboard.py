@@ -302,33 +302,25 @@ def inject_css():
           fill: none !important;
         }
 
+
         /* =========================================================
-           ✅ FIX (CIRÚRGICO): Labels do MENU da direita (coluna 2)
-           - Corrige "Selecione o Município:", "Selecione o Cenário:" e
-             "Exibir Camadas Atingidas:" que estavam quase brancos/apagados
-           - Não altera valores/caixas dos selects
+           FIX: TÍTULOS (labels) do MENU da direita (2ª coluna)
+           “Selecione o Município:”, “Selecione o Cenário:”, “Exibir Camadas Atingidas:”
+           - força cinza escuro + opacity 1
+           - NÃO altera os selects (apenas os títulos)
         ========================================================= */
-        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
-        [data-testid="stWidgetLabel"] p,
-        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
-        [data-testid="stWidgetLabel"] span,
-        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
-        div[data-testid="stSelectbox"] label p,
-        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
-        div[data-testid="stMultiSelect"] label p{
+        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2) [data-testid="stWidgetLabel"] p,
+        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2) [data-testid="stWidgetLabel"] span,
+        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2) label p,
+        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2) label span,
+        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2) .stSelectbox label p,
+        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2) .stMultiSelect label p {
           color: #555 !important;
           opacity: 1 !important;
           font-weight: 700 !important;
         }
 
-        /* fallback para quando o label vem sem <p> */
-        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
-        [data-testid="stWidgetLabel"]{
-          color: #555 !important;
-          opacity: 1 !important;
-        }
-
-        </style>
+</style>
         """,
         unsafe_allow_html=True,
     )
