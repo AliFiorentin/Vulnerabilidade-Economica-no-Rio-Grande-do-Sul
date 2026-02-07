@@ -1,4 +1,3 @@
-
 from pathlib import Path
 import re
 import hashlib
@@ -130,7 +129,6 @@ def inject_css():
         <style>
         /* =========================================================
            ✅ FORÇAR LIGHT (SEM ALTERAR SEU MENU)
-           - Deixa o app light mesmo com sistema dark
         ========================================================= */
         :root { color-scheme: light !important; }
         html, body, .stApp { background:#fff !important; color:#000 !important; }
@@ -248,7 +246,6 @@ def inject_css():
 
         /* =========================================================
            ✅ PATCH: HEADER/TOOLBAR BRANCO + ÍCONES OK
-           (SEM mexer no menu)
         ========================================================= */
         [data-testid="stHeader"],
         [data-testid="stToolbar"],
@@ -257,7 +254,6 @@ def inject_css():
           border-bottom: 1px solid #eaeaea !important;
         }
 
-        /* Não use regra global tipo: [data-testid="stHeader"] * { ... } */
         [data-testid="stHeader"] a,
         [data-testid="stHeader"] button,
         [data-testid="stHeader"] [role="button"],
@@ -270,7 +266,6 @@ def inject_css():
           color:#111 !important;
         }
 
-        /* SVGs do header: currentColor + stroke */
         [data-testid="stHeader"] svg,
         [data-testid="stToolbar"] svg,
         [data-testid="stAppToolbar"] svg{
@@ -289,18 +284,32 @@ def inject_css():
           fill: none !important;
         }
 
-
         /* =========================================================
-           ✅ FIX: TEXTO/PLACEHOLDER DO MULTISELECT (CAMADAS) NO MENU
-           - Corrige o texto dentro da caixa quando não há seleção
+           ✅ FIX: PLACEHOLDER DO MULTISELECT (só dentro da caixa)
+           - força o texto "Selecione a(s) Camada(s)" a ficar cinza escuro
+           - NÃO mexe nos labels/títulos fora da caixa
         ========================================================= */
+
+        /* Escopo: coluna do menu (2ª coluna do horizontal block) */
         .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
-        div[data-testid="stMultiSelect"] [data-baseweb="select"] *{
+        div[data-testid="stMultiSelect"] [role="combobox"]{
+          color:#111 !important; /* texto normal */
+        }
+
+        /* Placeholder do BaseWeb: geralmente é um <div> dentro do combobox */
+        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
+        div[data-testid="stMultiSelect"] [role="combobox"] div{
           color:#111 !important;
+        }
+
+        /* Quando está vazio, o placeholder costuma ser o "primeiro bloco" dentro do value container */
+        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
+        div[data-testid="stMultiSelect"] [data-baseweb="select"] > div > div > div > div{
+          color:#666 !important;         /* CINZA do placeholder */
           opacity: 1 !important;
         }
 
-        /* força cor do input/placeholder do multiselect (BaseWeb) */
+        /* Se o Streamlit renderizar como input */
         .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
         div[data-testid="stMultiSelect"] [data-baseweb="select"] input{
           color:#111 !important;
@@ -309,10 +318,12 @@ def inject_css():
         }
         .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
         div[data-testid="stMultiSelect"] [data-baseweb="select"] input::placeholder{
-          color:#666 !important;
+          color:#666 !important;         /* CINZA do placeholder */
           opacity: 1 !important;
           -webkit-text-fill-color:#666 !important;
         }
+
+        /* Alguns builds usam classes tipo Placeholder */
         .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
         div[data-testid="stMultiSelect"] [data-baseweb="select"] [class*='Placeholder']{
           color:#666 !important;
@@ -324,7 +335,6 @@ def inject_css():
         unsafe_allow_html=True,
     )
 
-    # reforço no head do browser (ajuda em alguns navegadores)
     st.markdown('<meta name="color-scheme" content="light">', unsafe_allow_html=True)
 
 
