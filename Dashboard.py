@@ -1749,7 +1749,7 @@ with col_map:
 
     st_folium(
         st.session_state["folium_map"],
-        height=680,
+        height=660,
         use_container_width=True,
         key="map_main",
         returned_objects=[],
