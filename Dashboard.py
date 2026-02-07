@@ -329,6 +329,19 @@ def inject_css():
           color:#666 !important;
           opacity: 1 !important;
         }
+        
+        /* =========================================================
+        🔥    FIX DEFINITIVO: PLACEHOLDER DO MULTISELECT (BaseWeb)
+                - Corrige APENAS "Selecione a(s) Camada(s)"
+        ========================================================= */
+        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
+        div[data-testid="stMultiSelect"] [data-baseweb="select"]
+        [style*="color"]{
+        color: #555 !important;
+        -webkit-text-fill-color: #555 !important;
+        opacity: 1 !important;
+        }
+
 
         </style>
         """,
