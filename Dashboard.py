@@ -256,7 +256,6 @@ def inject_css():
           border-bottom: 1px solid #eaeaea !important;
         }
 
-        /* Não use regra global tipo: [data-testid="stHeader"] * { ... } */
         [data-testid="stHeader"] a,
         [data-testid="stHeader"] button,
         [data-testid="stHeader"] [role="button"],
@@ -269,7 +268,6 @@ def inject_css():
           color:#111 !important;
         }
 
-        /* SVGs do header: currentColor + stroke */
         [data-testid="stHeader"] svg,
         [data-testid="stToolbar"] svg,
         [data-testid="stAppToolbar"] svg{
@@ -289,42 +287,66 @@ def inject_css():
         }
 
         /* =========================================================
-           ✅ FIX: TEXTO/PLACEHOLDER DO MULTISELECT (CAMADAS) NO MENU
-           - Corrige o texto dentro da caixa quando não há seleção
+           ✅ FIX COMPLETO — TEXTO DO MULTISELECT (CAMADAS)
+           Corrige branco no texto (placeholder + selecionados)
         ========================================================= */
 
-        /* 1) Garante texto do multiselect (normal) */
+        /* Área inteira do multiselect */
+        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
+        div[data-testid="stMultiSelect"]{
+          color:#111 !important;
+        }
+
+        /* Caixa principal (select / combobox) */
         .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
         div[data-testid="stMultiSelect"] [data-baseweb="select"],
         .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
-        div[data-testid="stMultiSelect"] [data-baseweb="select"] *{
+        div[data-testid="stMultiSelect"] div[role="combobox"]{
+          background:#fff !important;
           color:#111 !important;
           -webkit-text-fill-color:#111 !important;
+          opacity:1 !important;
         }
 
-        /* 2) PLACEHOLDER (BaseWeb) — ESTE É O QUE ESTAVA FICANDO BRANCO
-              Troque #666 pela cor que você quiser */
+        /* Texto do VALOR selecionado (SingleValue/Value) */
         .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
-        div[data-testid="stMultiSelect"] [data-baseweb="select"] [class*="Placeholder"],
+        div[data-testid="stMultiSelect"] [class*="SingleValue"],
         .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
-        div[data-testid="stMultiSelect"] [data-baseweb="select"] [class*="placeholder"]{
-          color:#666 !important;
-          -webkit-text-fill-color:#666 !important;
-          opacity: 1 !important;
-        }
-
-        /* 3) Se renderizar como input, força placeholder do input também */
-        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
-        div[data-testid="stMultiSelect"] [data-baseweb="select"] input{
+        div[data-testid="stMultiSelect"] [class*="Value"]{
           color:#111 !important;
           -webkit-text-fill-color:#111 !important;
-          opacity: 1 !important;
+          opacity:1 !important;
         }
+
+        /* Placeholder quando vazio */
         .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
-        div[data-testid="stMultiSelect"] [data-baseweb="select"] input::placeholder{
+        div[data-testid="stMultiSelect"] [class*="Placeholder"],
+        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
+        div[data-testid="stMultiSelect"] [class*="placeholder"]{
           color:#666 !important;
           -webkit-text-fill-color:#666 !important;
-          opacity: 1 !important;
+          opacity:1 !important;
+        }
+
+        /* Input interno */
+        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
+        div[data-testid="stMultiSelect"] input{
+          color:#111 !important;
+          -webkit-text-fill-color:#111 !important;
+          caret-color:#111 !important;
+          opacity:1 !important;
+        }
+        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
+        div[data-testid="stMultiSelect"] input::placeholder{
+          color:#666 !important;
+          -webkit-text-fill-color:#666 !important;
+          opacity:1 !important;
+        }
+
+        /* Segurança extra: qualquer texto dentro do multiselect */
+        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2)
+        div[data-testid="stMultiSelect"] *{
+          -webkit-text-fill-color: inherit !important;
         }
 
         </style>
