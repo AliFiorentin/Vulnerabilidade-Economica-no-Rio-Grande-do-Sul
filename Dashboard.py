@@ -44,7 +44,6 @@ except Exception:
     Font = PatternFill = Alignment = Border = Side = None
     get_column_letter = None
 
-
 # =========================
 # CAMINHOS (DIRETO NA PASTA, SEM DISCO G:)
 # =========================
@@ -96,7 +95,6 @@ MUNICIPIO_VIEW = {
 PLACEHOLDER_EMP = "Selecione a Camada Empresas"
 PLACEHOLDER_EDU = "Selecione a Camada Educação"
 PLACEHOLDER_SAU = "Selecione a Camada Saúde"
-
 
 # =========================
 # SAÚDE - STAFFS
@@ -538,7 +536,8 @@ def read_csv_robust(path: Path, **kwargs) -> pd.DataFrame:
 # =========================
 def _is_currency_indicator(indicador: str) -> bool:
     indicador = (indicador or "").lower()
-    return ("(r$)" in indicador) or ("massa salarial" in indicador) or ("média salarial" in indicador) or ("media salarial" in indicador)
+    return ("(r$)" in indicador) or ("massa salarial" in indicador) or ("média salarial" in indicador) or (
+                "media salarial" in indicador)
 
 
 def _fmt_delta_cell(indicador: str, total_val, scen_val) -> str:
@@ -923,7 +922,8 @@ def build_export_df(
              float(sau_imp.get("unidades", np.nan)) if (show_delta and delta_layers.get("Saúde", False)) else np.nan)
 
         tipo_total = {}
-        if (gdf_sau_total is not None) and (not gdf_sau_total.empty) and ("co_tipo_estabelecimento" in gdf_sau_total.columns):
+        if (gdf_sau_total is not None) and (not gdf_sau_total.empty) and (
+                "co_tipo_estabelecimento" in gdf_sau_total.columns):
             s = gdf_sau_total["co_tipo_estabelecimento"].astype(str).map(fix_mojibake_text).str.strip()
             s = s.replace("nan", "")
             s = s[s != ""]
@@ -959,8 +959,10 @@ def build_export_df(
         _add("Educação", "Professores", float(edu_base.get("prof", 0.0)),
              float(edu_imp.get("prof", np.nan)) if (show_delta and delta_layers.get("Educação", False)) else np.nan)
 
-        dep_total = escolas_por_dependencia(gdf_edu_total) if (gdf_edu_total is not None and not gdf_edu_total.empty) else {}
-        dep_imp = escolas_por_dependencia(gdf_edu_imp) if (show_delta and delta_layers.get("Educação", False) and gdf_edu_imp is not None and not gdf_edu_imp.empty) else {}
+        dep_total = escolas_por_dependencia(gdf_edu_total) if (
+                    gdf_edu_total is not None and not gdf_edu_total.empty) else {}
+        dep_imp = escolas_por_dependencia(gdf_edu_imp) if (show_delta and delta_layers.get("Educação",
+                                                                                           False) and gdf_edu_imp is not None and not gdf_edu_imp.empty) else {}
         if dep_total:
             order = ["Federal", "Estadual", "Municipal", "Privada"]
             keys = _ordered_keys(dep_total, order)
@@ -968,8 +970,10 @@ def build_export_df(
                 _add("Educação", f"Escolas - {k}", float(dep_total.get(k, 0)),
                      float(dep_imp.get(k, np.nan)) if (show_delta and delta_layers.get("Educação", False)) else np.nan)
 
-        loc_total = escolas_por_localizacao(gdf_edu_total) if (gdf_edu_total is not None and not gdf_edu_total.empty) else {}
-        loc_imp = escolas_por_localizacao(gdf_edu_imp) if (show_delta and delta_layers.get("Educação", False) and gdf_edu_imp is not None and not gdf_edu_imp.empty) else {}
+        loc_total = escolas_por_localizacao(gdf_edu_total) if (
+                    gdf_edu_total is not None and not gdf_edu_total.empty) else {}
+        loc_imp = escolas_por_localizacao(gdf_edu_imp) if (show_delta and delta_layers.get("Educação",
+                                                                                           False) and gdf_edu_imp is not None and not gdf_edu_imp.empty) else {}
         if loc_total:
             order = ["Urbana", "Rural"]
             keys = _ordered_keys(loc_total, order)
@@ -1039,7 +1043,8 @@ def export_df_to_xlsx_bytes(df: pd.DataFrame, sheet_name: str = "Tabela") -> byt
     for i, row in enumerate(df2.itertuples(index=False, name=None), start=2):
         row_dict = dict(zip(cols, row))
         indicador = str(row[idx_indicador]).lower() if idx_indicador is not None else ""
-        is_currency = ("(r$)" in indicador) or ("massa salarial" in indicador) or ("média salarial" in indicador) or ("media salarial" in indicador)
+        is_currency = ("(r$)" in indicador) or ("massa salarial" in indicador) or ("média salarial" in indicador) or (
+                    "media salarial" in indicador)
 
         for j, col in enumerate(cols, start=1):
             val = row_dict.get(col, None)
@@ -1075,7 +1080,7 @@ def export_df_to_xlsx_bytes(df: pd.DataFrame, sheet_name: str = "Tabela") -> byt
                     cell.number_format = "General"
 
     ws.freeze_panes = "A2"
-    ws.auto_filter.ref = f"A1:{get_column_letter(len(df2.columns))}{len(df2)+1}"
+    ws.auto_filter.ref = f"A1:{get_column_letter(len(df2.columns))}{len(df2) + 1}"
 
     widths = {"Município": 16, "Camada": 14, "Indicador": 34, "Total": 16, "Delta": 22}
     for j, col in enumerate(df2.columns, start=1):
@@ -1176,7 +1181,7 @@ def popup_saude(row) -> str:
             v = 0.0
         if v > 0:
             any_staff = True
-            staff_lines.append(f"{STAFF_LABELS.get(c,c)}: {int(v)}")
+            staff_lines.append(f"{STAFF_LABELS.get(c, c)}: {int(v)}")
 
     staff_html = "<br>".join(staff_lines) if any_staff else "Sem informação"
 
@@ -1544,7 +1549,8 @@ with col_menu:
     # filtro empresas
     if "Empresas" in layers:
         if "CNAE_2" in emp_tmp.columns:
-            setores = sorted([x for x in emp_tmp["CNAE_2"].astype(str).str.strip().unique() if x and x.lower() not in ("nan", "none")])
+            setores = sorted([x for x in emp_tmp["CNAE_2"].astype(str).str.strip().unique() if
+                              x and x.lower() not in ("nan", "none")])
         else:
             setores = []
         if len(setores) == 0:
@@ -1573,7 +1579,8 @@ with col_menu:
 
     # filtro saúde
     if "Saúde" in layers:
-        tipos = sorted([fix_mojibake_text(x) for x in sau_tmp.get("co_tipo_estabelecimento", pd.Series([], dtype="object")).astype(str).unique()
+        tipos = sorted([fix_mojibake_text(x) for x in
+                        sau_tmp.get("co_tipo_estabelecimento", pd.Series([], dtype="object")).astype(str).unique()
                         if x and x.lower() != "nan"])
         st.selectbox(
             "Selecione a Unidade (Saúde):",
@@ -1604,18 +1611,22 @@ dep_sel = st.session_state.get("filtro_dep_escolas", PLACEHOLDER_EDU)
 tipo_sel = st.session_state.get("filtro_tipo_saude", PLACEHOLDER_SAU)
 
 gdf_emp_f = gdf_emp_mun.copy()
-if ("Empresas" in layers) and (not is_placeholder(setor_sel, PLACEHOLDER_EMP)) and (str(setor_sel).strip() != "(todos)") and ("CNAE_2" in gdf_emp_f.columns):
+if ("Empresas" in layers) and (not is_placeholder(setor_sel, PLACEHOLDER_EMP)) and (
+        str(setor_sel).strip() != "(todos)") and ("CNAE_2" in gdf_emp_f.columns):
     gdf_emp_f["CNAE_2"] = gdf_emp_f["CNAE_2"].astype(str)
     gdf_emp_f = gdf_emp_f[gdf_emp_f["CNAE_2"] == str(setor_sel)].copy()
 
 gdf_edu_f = gdf_edu_mun.copy()
-if ("Educação" in layers) and (not is_placeholder(dep_sel, PLACEHOLDER_EDU)) and (str(dep_sel).strip() != "(todas)") and ("tp_dependencia" in gdf_edu_f.columns):
+if ("Educação" in layers) and (not is_placeholder(dep_sel, PLACEHOLDER_EDU)) and (
+        str(dep_sel).strip() != "(todas)") and ("tp_dependencia" in gdf_edu_f.columns):
     gdf_edu_f["_dep_norm"] = normaliza_dependencia(gdf_edu_f["tp_dependencia"])
     gdf_edu_f = gdf_edu_f[gdf_edu_f["_dep_norm"] == dep_sel].copy()
 
 gdf_sau_f = gdf_sau_mun.copy()
-if ("Saúde" in layers) and (not is_placeholder(tipo_sel, PLACEHOLDER_SAU)) and (str(tipo_sel).strip() != "(todas)") and ("co_tipo_estabelecimento" in gdf_sau_f.columns):
-    gdf_sau_f["co_tipo_estabelecimento"] = gdf_sau_f["co_tipo_estabelecimento"].astype(str).map(fix_mojibake_text).str.strip()
+if ("Saúde" in layers) and (not is_placeholder(tipo_sel, PLACEHOLDER_SAU)) and (
+        str(tipo_sel).strip() != "(todas)") and ("co_tipo_estabelecimento" in gdf_sau_f.columns):
+    gdf_sau_f["co_tipo_estabelecimento"] = gdf_sau_f["co_tipo_estabelecimento"].astype(str).map(
+        fix_mojibake_text).str.strip()
     gdf_sau_f = gdf_sau_f[gdf_sau_f["co_tipo_estabelecimento"] == str(tipo_sel)].copy()
 
 emp_base = empresas_metrics(gdf_emp_f)
@@ -1692,7 +1703,7 @@ with col_map:
 
     st_folium(
         st.session_state["folium_map"],
-        height=680,
+        height=660,
         use_container_width=True,
         key="map_main",
         returned_objects=[],
@@ -1797,9 +1808,12 @@ with col_menu:
             st.session_state["export_file_name"] = None
 
             with st.spinner("Preparando arquivo para download..."):
-                emp_imp2 = empresas_metrics(emp_hits) if (has_cenario and emp_hits is not None and ("Empresas" in layers_sel)) else None
-                edu_imp2 = educacao_metrics(edu_hits) if (has_cenario and edu_hits is not None and ("Educação" in layers_sel)) else None
-                sau_imp2 = saude_metrics(sau_hits) if (has_cenario and ("Saúde" in layers_sel) and sau_hits is not None) else None
+                emp_imp2 = empresas_metrics(emp_hits) if (
+                            has_cenario and emp_hits is not None and ("Empresas" in layers_sel)) else None
+                edu_imp2 = educacao_metrics(edu_hits) if (
+                            has_cenario and edu_hits is not None and ("Educação" in layers_sel)) else None
+                sau_imp2 = saude_metrics(sau_hits) if (
+                            has_cenario and ("Saúde" in layers_sel) and sau_hits is not None) else None
 
                 df_export = build_export_df(
                     municipio=mun_sel,
@@ -1808,15 +1822,17 @@ with col_menu:
                     emp_base=emp_base, edu_base=edu_base, sau_base=sau_base,
                     emp_imp=emp_imp2, edu_imp=edu_imp2, sau_imp=sau_imp2,
                     gdf_edu_total=gdf_edu_f if ("Educação" in layers_sel) else None,
-                    gdf_edu_imp=edu_hits if (has_cenario and ("Educação" in layers_sel) and edu_hits is not None) else None,
+                    gdf_edu_imp=edu_hits if (
+                                has_cenario and ("Educação" in layers_sel) and edu_hits is not None) else None,
                     gdf_sau_total=gdf_sau_f if ("Saúde" in layers_sel) else None,
-                    gdf_sau_imp=sau_hits if (has_cenario and ("Saúde" in layers_sel) and sau_hits is not None) else None,
+                    gdf_sau_imp=sau_hits if (
+                                has_cenario and ("Saúde" in layers_sel) and sau_hits is not None) else None,
                     show_delta=has_cenario,
                 )
 
                 layers_tag = "-".join([re.sub(r"[^A-Za-z0-9]+", "", x) for x in layers_sel])[:40]
                 cen_tag = re.sub(r"[^A-Za-z0-9]+", "_", str(cen_sel)) if has_cenario else "Total"
-                file_name = f"Tabela_{re.sub(r'[^A-Za-z0-9]+','_',mun_sel)}_{cen_tag}_{layers_tag}.xlsx"
+                file_name = f"Tabela_{re.sub(r'[^A-Za-z0-9]+', '_', mun_sel)}_{cen_tag}_{layers_tag}.xlsx"
 
                 xlsx_bytes = export_df_to_xlsx_bytes(df_export, sheet_name=mun_sel)
 
