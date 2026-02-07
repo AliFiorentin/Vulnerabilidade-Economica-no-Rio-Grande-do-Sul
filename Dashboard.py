@@ -302,28 +302,15 @@ def inject_css():
           fill: none !important;
         }
 
-        /* =========================================================
-           ✅ FIX: TÍTULOS (labels) DO MENU DA DIREITA
-           (st.selectbox / st.multiselect) estavam brancos e sumindo no fundo branco
-           - Mira exatamente a 2ª coluna (col_menu) e seus widget labels
-        ========================================================= */
-        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2) > div[data-testid="stVerticalBlock"]
-        [data-testid="stWidgetLabel"],
-        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2) > div[data-testid="stVerticalBlock"]
-        [data-testid="stWidgetLabel"] p,
-        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2) > div[data-testid="stVerticalBlock"]
-        [data-testid="stWidgetLabel"] span,
-        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2) > div[data-testid="stVerticalBlock"]
-        label,
-        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2) > div[data-testid="stVerticalBlock"]
-        label p,
-        .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2) > div[data-testid="stVerticalBlock"]
-        label span{
-          color: #555 !important;   /* cinza escuro */
-          opacity: 1 !important;
-          font-weight: 700 !important;
+        .menu-label{
+          color:#555 !important;
+          font-weight:700 !important;
+          opacity:1 !important;
+          margin: 0 0 0.25rem 0;
+          font-size: 0.85rem;
         }
-</style>
+
+        </style>
         """,
         unsafe_allow_html=True,
     )
@@ -1491,111 +1478,121 @@ with col_menu:
     st.markdown("</div>", unsafe_allow_html=True)
     st.markdown('<div class="menu-title">Menu de Seleção</div>', unsafe_allow_html=True)
 
+    st.markdown('<div class="menu-label">Selecione o Município:</div>', unsafe_allow_html=True)
     mun_choice = st.selectbox(
         "Selecione o Município:",
         options=[""] + municipios,
         index=0,
         format_func=lambda x: "Escolha um Município" if x == "" else x,
         key="mun_select",
+        label_visibility="collapsed",
     )
     st.session_state.selected_mun = None if mun_choice == "" else mun_choice
 
     if st.session_state.selected_mun and st.session_state.selected_mun in CENARIOS:
         cen_opts = [""] + list(CENARIOS[st.session_state.selected_mun].keys())
+        st.markdown('<div class="menu-label">Selecione o Cenário:</div>', unsafe_allow_html=True)
         cen_choice = st.selectbox(
             "Selecione o Cenário:",
             options=cen_opts,
             index=0,
             format_func=lambda x: "(nenhum)" if x == "" else x,
             key="cenario_select",
+            label_visibility="collapsed",
         )
         st.session_state.selected_cenario = None if cen_choice == "" else cen_choice
     else:
+        st.markdown('<div class="menu-label">Selecione o Cenário:</div>', unsafe_allow_html=True)
         st.selectbox(
             "Selecione o Cenário:",
             options=[""],
             format_func=lambda x: "Selecione um Município",
             disabled=True,
             key="cenario_disabled",
+            label_visibility="collapsed",
         )
         st.session_state.selected_cenario = None
 
     try:
-        layers = st.multiselect(
-            "Exibir Camadas Atingidas:",
-            options=["Empresas", "Educação", "Saúde"],
-            default=[],
-            key="layers_multiselect",
-            placeholder="Selecione a(s) Camada(s)",
-        )
+        st.markdown('<div class="menu-label">Exibir Camadas Atingidas:</div>', unsafe_allow_html=True)
+
+    layers = st.multiselect(
+        "Exibir Camadas Atingidas:",
+        options=["Empresas", "Educação", "Saúde"],
+        default=[],
+        key="layers_multiselect",
+        placeholder="Selecione a(s) Camada(s)",
+        label_visibility="collapsed",
+    )
     except TypeError:
-        layers = st.multiselect(
-            "Exibir Camadas Atingidas:",
-            options=["Empresas", "Educação", "Saúde"],
-            default=[],
-            key="layers_multiselect",
-        )
+    layers = st.multiselect(
+        "Exibir Camadas Atingidas:",
+        options=["Empresas", "Educação", "Saúde"],
+        default=[],
+        key="layers_multiselect",
+        label_visibility="collapsed",
+    )
 
-    if "Empresas" not in layers:
-        st.session_state["filtro_setor_empresas"] = PLACEHOLDER_EMP
-    if "Educação" not in layers:
-        st.session_state["filtro_dep_escolas"] = PLACEHOLDER_EDU
-    if "Saúde" not in layers:
-        st.session_state["filtro_tipo_saude"] = PLACEHOLDER_SAU
+if "Empresas" not in layers:
+    st.session_state["filtro_setor_empresas"] = PLACEHOLDER_EMP
+if "Educação" not in layers:
+    st.session_state["filtro_dep_escolas"] = PLACEHOLDER_EDU
+if "Saúde" not in layers:
+    st.session_state["filtro_tipo_saude"] = PLACEHOLDER_SAU
 
-    if st.session_state.selected_mun:
-        emp_tmp = gdf_emp_all[gdf_emp_all["Municipio"] == st.session_state.selected_mun].copy()
-        edu_tmp = gdf_edu_all[gdf_edu_all["Municipio"] == st.session_state.selected_mun].copy()
-        sau_tmp = gdf_sau_all[gdf_sau_all["Municipio"] == st.session_state.selected_mun].copy()
+if st.session_state.selected_mun:
+    emp_tmp = gdf_emp_all[gdf_emp_all["Municipio"] == st.session_state.selected_mun].copy()
+    edu_tmp = gdf_edu_all[gdf_edu_all["Municipio"] == st.session_state.selected_mun].copy()
+    sau_tmp = gdf_sau_all[gdf_sau_all["Municipio"] == st.session_state.selected_mun].copy()
+else:
+    emp_tmp, edu_tmp, sau_tmp = gdf_emp_all.copy(), gdf_edu_all.copy(), gdf_sau_all.copy()
+
+# filtro empresas
+if "Empresas" in layers:
+    if "CNAE_2" in emp_tmp.columns:
+        setores = sorted(
+            [x for x in emp_tmp["CNAE_2"].astype(str).str.strip().unique() if x and x.lower() not in ("nan", "none")])
     else:
-        emp_tmp, edu_tmp, sau_tmp = gdf_emp_all.copy(), gdf_edu_all.copy(), gdf_sau_all.copy()
+        setores = []
+    if len(setores) == 0:
+        st.caption("Não foram encontrados setores (CNAE) no recorte. Verifique a coluna CNAE no arquivo.")
+    st.selectbox(
+        "Selecione o Setor (Empresas):",
+        options=["(todos)"] + setores,
+        index=0,
+        key="filtro_setor_empresas",
+    )
+else:
+    st.session_state["filtro_setor_empresas"] = "(todos)"
 
-    # filtro empresas
-    if "Empresas" in layers:
-        if "CNAE_2" in emp_tmp.columns:
-            setores = sorted([x for x in emp_tmp["CNAE_2"].astype(str).str.strip().unique() if
-                              x and x.lower() not in ("nan", "none")])
-        else:
-            setores = []
-        if len(setores) == 0:
-            st.caption("Não foram encontrados setores (CNAE) no recorte. Verifique a coluna CNAE no arquivo.")
-        st.selectbox(
-            "Selecione o Setor (Empresas):",
-            options=["(todos)"] + setores,
-            index=0,
-            key="filtro_setor_empresas",
-        )
-    else:
-        st.session_state["filtro_setor_empresas"] = "(todos)"
+# filtro educação
+if "Educação" in layers:
+    dep_vals = normaliza_dependencia(edu_tmp.get("tp_dependencia", pd.Series([], dtype="object")))
+    deps = [d for d in ["Federal", "Estadual", "Municipal", "Privada"] if d in set(dep_vals.unique())]
+    st.selectbox(
+        "Selecione a Dependência (Escolas):",
+        options=["(todas)"] + deps,
+        index=0,
+        key="filtro_dep_escolas",
+    )
+else:
+    st.session_state["filtro_dep_escolas"] = "(todas)"
 
-    # filtro educação
-    if "Educação" in layers:
-        dep_vals = normaliza_dependencia(edu_tmp.get("tp_dependencia", pd.Series([], dtype="object")))
-        deps = [d for d in ["Federal", "Estadual", "Municipal", "Privada"] if d in set(dep_vals.unique())]
-        st.selectbox(
-            "Selecione a Dependência (Escolas):",
-            options=["(todas)"] + deps,
-            index=0,
-            key="filtro_dep_escolas",
-        )
-    else:
-        st.session_state["filtro_dep_escolas"] = "(todas)"
+# filtro saúde
+if "Saúde" in layers:
+    tipos = sorted([fix_mojibake_text(x) for x in
+                    sau_tmp.get("co_tipo_estabelecimento", pd.Series([], dtype="object")).astype(str).unique()
+                    if x and x.lower() != "nan"])
+    st.selectbox(
+        "Selecione a Unidade (Saúde):",
+        options=["(todas)"] + tipos,
+        index=0,
+        key="filtro_tipo_saude",
+    )
+else:
+    st.session_state["filtro_tipo_saude"] = "(todas)"
 
-    # filtro saúde
-    if "Saúde" in layers:
-        tipos = sorted([fix_mojibake_text(x) for x in
-                        sau_tmp.get("co_tipo_estabelecimento", pd.Series([], dtype="object")).astype(str).unique()
-                        if x and x.lower() != "nan"])
-        st.selectbox(
-            "Selecione a Unidade (Saúde):",
-            options=["(todas)"] + tipos,
-            index=0,
-            key="filtro_tipo_saude",
-        )
-    else:
-        st.session_state["filtro_tipo_saude"] = "(todas)"
-
-    st.markdown("---")
+st.markdown("---")
 
 layers = st.session_state.get("layers_multiselect", []) or []
 
