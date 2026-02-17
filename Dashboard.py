@@ -147,14 +147,13 @@ def inject_css():
         """
         <style>
         /* =========================================================
-           ✅ FORÇAR LIGHT (SEM ALTERAR SEU MENU)
-           - Deixa o app light mesmo com sistema dark
+           ✅ FORÇAR LIGHT
         ========================================================= */
         :root { color-scheme: light !important; }
         html, body, .stApp { background:#fff !important; color:#000 !important; }
 
         /* =========================================================
-           ✅ LAYOUT / SPACING (SEU ORIGINAL)
+           ✅ LAYOUT / SPACING
         ========================================================= */
         .block-container {
           padding-top: 2.1rem !important;
@@ -184,6 +183,7 @@ def inject_css():
         section[data-testid="stSidebar"] * { color:#000 !important; }
         section[data-testid="stSidebar"] div[data-testid="stSidebarContent"]{ padding-top: 0.2rem !important; }
 
+        /* Painel (coluna 2 da main) */
         .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2) > div[data-testid="stVerticalBlock"]{
           border: 2px solid #111 !important;
           border-radius: 12px !important;
@@ -191,6 +191,38 @@ def inject_css():
           background:#fff !important;
           max-height: 680px !important;
           overflow-y: auto !important;
+        }
+
+        /* =========================================================
+           ✅ MENU (col_menu) EM UMA BOX ROLÁVEL (SEM ESTOURAR A PÁGINA)
+           - A BOX TEM ALTURA FIXA
+           - O CONTEÚDO INTERNO ROLA
+           - O RODAPÉ (DOWNLOAD) FICA FIXO NO FIM DA BOX
+        ========================================================= */
+        .menu-box{
+          border: 2px solid #111 !important;
+          border-radius: 12px !important;
+          background:#fff !important;
+
+          /* altura fixa do menu */
+          height: calc(100vh - 140px) !important;
+
+          display: flex !important;
+          flex-direction: column !important;
+          overflow: hidden !important; /* não deixa vazar */
+          padding: 12px 12px 12px 12px !important;
+        }
+        .menu-scroll{
+          flex: 1 1 auto !important;
+          overflow-y: auto !important;
+          padding-right: 4px !important;
+        }
+        .menu-footer{
+          flex: 0 0 auto !important;
+          border-top: 1px solid #e6e6e6 !important;
+          padding-top: 10px !important;
+          margin-top: 10px !important;
+          background: #fff !important;
         }
 
         /* =========================================================
@@ -329,19 +361,14 @@ def inject_css():
         /* =========================================================
            ✅ MULTISELECT (portal + dropdown) - FIX DEFINITIVO
         ========================================================= */
-        /* Controle do multiselect (caixa) */
         div[data-testid="stMultiSelect"] [data-baseweb="select"]{
           background:#fff !important;
         }
-
-        /* Texto dentro da caixa (valor/seleção) */
         div[data-testid="stMultiSelect"] [data-baseweb="select"] *{
           color:#111 !important;
           -webkit-text-fill-color:#111 !important;
           opacity: 1 !important;
         }
-
-        /* Placeholder (cinza legível) */
         div[data-testid="stMultiSelect"] [data-baseweb="select"] [class*="Placeholder"],
         div[data-testid="stMultiSelect"] [data-baseweb="select"] [class*="placeholder"],
         div[data-testid="stMultiSelect"] [data-baseweb="select"] input::placeholder{
@@ -350,7 +377,6 @@ def inject_css():
           opacity: 1 !important;
         }
 
-        /* Dropdown (portal/popover) */
         div[data-baseweb="popover"]{
           background:#fff !important;
         }
@@ -419,45 +445,19 @@ def inject_css():
         }
 
         /* =========================================================
-           ✅ MENU: TUDO PRETO (use junto com wrapper .menu-wrap)
-           - Se você envolver o menu com <div class="menu-wrap"> ... </div>
-           - garante texto preto em captions/alerts/qualquer coisa
+           ✅ MENU: tudo preto (seguro)
         ========================================================= */
-        .menu-wrap, .menu-wrap *{
-          color: #000 !important;
-          -webkit-text-fill-color: #000 !important;
+        .menu-box, .menu-box *{
+          color:#000 !important;
+          -webkit-text-fill-color:#000 !important;
         }
 
-        /* manter texto do botão de download branco mesmo dentro do menu-wrap */
-        .menu-wrap div[data-testid="stDownloadButton"] > button,
-        .menu-wrap div[data-testid="stDownloadButton"] > button *{
+        /* manter texto do botão branco */
+        .menu-box div[data-testid="stDownloadButton"] > button,
+        .menu-box div[data-testid="stDownloadButton"] > button *{
           color:#fff !important;
           -webkit-text-fill-color:#fff !important;
         }
-
-        /* placeholder cinza dentro do menu */
-        .menu-wrap div[data-testid="stSelectbox"] input::placeholder,
-        .menu-wrap div[data-testid="stMultiSelect"] input::placeholder,
-        .menu-wrap div[data-testid="stMultiSelect"] [class*="Placeholder"],
-        .menu-wrap div[data-testid="stMultiSelect"] [class*="placeholder"]{
-          color:#666 !important;
-          -webkit-text-fill-color:#666 !important;
-        }
-
-        /* tags do multiselect no menu: tudo preto (sem azul) */
-        .menu-wrap div[data-testid="stMultiSelect"] span[data-baseweb="tag"]{
-          background: #f2f2f2 !important;
-          border: 1px solid #d0d0d0 !important;
-        }
-        .menu-wrap div[data-testid="stMultiSelect"] span[data-baseweb="tag"] span{
-          color: #000 !important;
-          -webkit-text-fill-color:#000 !important;
-          font-weight: 800 !important;
-        }
-        .menu-wrap div[data-testid="stMultiSelect"] span[data-baseweb="tag"] svg{
-          fill: #000 !important;
-        }
-
         </style>
         """,
         unsafe_allow_html=True,
@@ -465,7 +465,6 @@ def inject_css():
 
     # reforço no head do browser (ajuda em alguns navegadores)
     st.markdown('<meta name="color-scheme" content="light">', unsafe_allow_html=True)
-
 
 
 # =========================
@@ -1601,9 +1600,12 @@ if "selected_cenario" not in st.session_state:
 
 col_map, col_menu = st.columns([5.15, 1.35], gap="small")
 
-# MENU (direita)
+# MENU (direita) — BOX ROLÁVEL + FOOTER FIXO
 with col_menu:
-    # ✅ logos robustos (não depende de nome exato)
+    st.markdown('<div class="menu-box">', unsafe_allow_html=True)
+    st.markdown('<div class="menu-scroll">', unsafe_allow_html=True)
+
+    # ✅ logos robustos
     BID_LOGO = find_logo(APP_DIR, ["BID.png", "bid.png", "BID.PNG", "bid.PNG"], contains="bid")
     GPEA_LOGO = find_logo(APP_DIR, ["GPEa.png", "GPEA.png", "gpea.png", "GPEa.PNG", "GPEA.PNG"], contains="gpea")
 
@@ -1664,7 +1666,7 @@ with col_menu:
     st.markdown('<div class="menu-label">Exibir Camadas Atingidas:</div>', unsafe_allow_html=True)
 
     try:
-        layers = st.multiselect(
+        layers_menu = st.multiselect(
             "Exibir Camadas Atingidas:",
             options=["Empresas", "Educação", "Saúde"],
             default=[],
@@ -1673,7 +1675,7 @@ with col_menu:
             label_visibility="collapsed",
         )
     except TypeError:
-        layers = st.multiselect(
+        layers_menu = st.multiselect(
             "Exibir Camadas Atingidas:",
             options=["Empresas", "Educação", "Saúde"],
             default=[],
@@ -1681,11 +1683,11 @@ with col_menu:
             label_visibility="collapsed",
         )
 
-    if "Empresas" not in layers:
+    if "Empresas" not in layers_menu:
         st.session_state["filtro_setor_empresas"] = PLACEHOLDER_EMP
-    if "Educação" not in layers:
+    if "Educação" not in layers_menu:
         st.session_state["filtro_dep_escolas"] = PLACEHOLDER_EDU
-    if "Saúde" not in layers:
+    if "Saúde" not in layers_menu:
         st.session_state["filtro_tipo_saude"] = PLACEHOLDER_SAU
 
     if st.session_state.selected_mun:
@@ -1696,7 +1698,7 @@ with col_menu:
         emp_tmp, edu_tmp, sau_tmp = gdf_emp_all.copy(), gdf_edu_all.copy(), gdf_sau_all.copy()
 
     # filtro empresas
-    if "Empresas" in layers:
+    if "Empresas" in layers_menu:
         if "CNAE_2" in emp_tmp.columns:
             setores = sorted([x for x in emp_tmp["CNAE_2"].astype(str).str.strip().unique() if x and x.lower() not in ("nan", "none")])
         else:
@@ -1713,7 +1715,7 @@ with col_menu:
         st.session_state["filtro_setor_empresas"] = "(todos)"
 
     # filtro educação
-    if "Educação" in layers:
+    if "Educação" in layers_menu:
         dep_vals = normaliza_dependencia(edu_tmp.get("tp_dependencia", pd.Series([], dtype="object")))
         deps = [d for d in ["Federal", "Estadual", "Municipal", "Privada"] if d in set(dep_vals.unique())]
         st.selectbox(
@@ -1726,7 +1728,7 @@ with col_menu:
         st.session_state["filtro_dep_escolas"] = "(todas)"
 
     # filtro saúde
-    if "Saúde" in layers:
+    if "Saúde" in layers_menu:
         tipos = sorted([fix_mojibake_text(x) for x in sau_tmp.get("co_tipo_estabelecimento", pd.Series([], dtype="object")).astype(str).unique()
                         if x and x.lower() != "nan"])
         st.selectbox(
@@ -1739,6 +1741,14 @@ with col_menu:
         st.session_state["filtro_tipo_saude"] = "(todas)"
 
     st.markdown("---")
+    st.markdown("</div>", unsafe_allow_html=True)  # fecha menu-scroll
+
+    # footer (download) — será preenchido depois (abaixo) quando já existir cenário/hits
+    st.markdown('<div class="menu-footer">', unsafe_allow_html=True)
+    st.markdown("<div style='font-size:12px; color:#333; font-weight:800;'>⬇️ Exportação</div>", unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)  # fecha menu-footer
+    st.markdown("</div>", unsafe_allow_html=True)  # fecha menu-box
+
 
 layers = st.session_state.get("layers_multiselect", []) or []
 
@@ -1804,7 +1814,7 @@ if show_delta and cenario_gdf is not None:
         sau_hits = points_in_polygon(gdf_sau_f, cenario_gdf)
 
 # =========================
-# ✅ MAPA memoizado em session_state
+# MAPA memoizado em session_state (tamanho FIXO = como era)
 # =========================
 with col_map:
     if show_delta and cenario_gdf is not None:
@@ -1846,7 +1856,7 @@ with col_map:
 
     st_folium(
         st.session_state["folium_map"],
-        height=660,
+        height=660,  # ✅ tamanho fixo (como era)
         use_container_width=True,
         key="map_main",
         returned_objects=[],
@@ -1909,25 +1919,23 @@ else:
     )
 
 # =========================
-# BOTÃO DE DOWNLOAD (FINAL DO MENU) — ESTÁVEL E SEM TRAVAR
+# ✅ DOWNLOAD DENTRO DA BOX DO MENU (FOOTER)
+# - precisa estar no mesmo "with col_menu:" (senão sai da box)
 # =========================
 with col_menu:
+    # reabre a box só para "escrever" dentro do footer via Streamlit
+    # (o DOM continua dentro do col_menu; o CSS é quem segura a box)
+    st.markdown("<div style='display:none'></div>", unsafe_allow_html=True)
+
     mun_sel = st.session_state.selected_mun
     cen_sel = st.session_state.selected_cenario
     layers_sel = st.session_state.get("layers_multiselect", []) or []
 
-    setor_sel2 = st.session_state.get("filtro_setor_empresas", "(todos)")
-    dep_sel2 = st.session_state.get("filtro_dep_escolas", "(todas)")
-    tipo_sel2 = st.session_state.get("filtro_tipo_saude", "(todas)")
-
     can_export = bool(mun_sel) and (len(layers_sel) > 0)
 
-    if not mun_sel:
+    if not can_export:
         st.info("Para exportar: selecione um Município e ao menos 1 Camada.")
-    elif len(layers_sel) == 0:
-        st.info("Para exportar: selecione ao menos 1 Camada em 'Exibir Camadas Atingidas'.")
-
-    if can_export:
+    else:
         has_cenario = bool(cen_sel) and bool(show_delta) and (cenario_gdf is not None)
         if (cen_sel is not None) and (str(cen_sel).strip() != "") and (not has_cenario):
             st.warning("Cenário selecionado, mas não foi possível carregá-lo. Exportando apenas o Total.")
@@ -1937,9 +1945,9 @@ with col_menu:
             str(cen_sel) if cen_sel else "",
             bool(has_cenario),
             tuple(layers_sel),
-            str(setor_sel2),
-            str(dep_sel2),
-            str(tipo_sel2),
+            str(st.session_state.get("filtro_setor_empresas", "(todos)")),
+            str(st.session_state.get("filtro_dep_escolas", "(todas)")),
+            str(st.session_state.get("filtro_tipo_saude", "(todas)")),
         )
 
         sig_key = hashlib.md5(repr(export_sig).encode("utf-8")).hexdigest()
