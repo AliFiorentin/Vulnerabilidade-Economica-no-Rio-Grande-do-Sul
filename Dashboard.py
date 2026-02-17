@@ -361,6 +361,37 @@ def inject_css():
           -webkit-text-fill-color:#111 !important;
           opacity: 1 !important;
         }
+        
+        /* =========================================================
+        ✅ BOTÃO DE DOWNLOAD (st.download_button)
+        ========================================================= */
+        div[data-testid="stDownloadButton"] > button{
+        background: #2b6fe8 !important;   /* cor do botão */
+        color: #ffffff !important;        /* cor do texto */
+        border: 1px solid #1f5fd6 !important;
+        border-radius: 10px !important;
+        font-weight: 800 !important;
+        }
+
+        div[data-testid="stDownloadButton"] > button:hover{
+        background: #1f5fd6 !important;
+        border-color: #174fb8 !important;
+        color: #ffffff !important;
+        }
+
+        div[data-testid="stDownloadButton"] > button:active{
+        background: #174fb8 !important;
+        border-color: #174fb8 !important;
+        color: #ffffff !important;
+        }
+
+        /* estado desabilitado (quando não tem arquivo) */
+        div[data-testid="stDownloadButton"] > button:disabled{
+        background: #e6e6e6 !important;
+        color: #777 !important;
+        border-color: #d0d0d0 !important;
+        }
+
 
         </style>
         """,
