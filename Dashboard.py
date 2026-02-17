@@ -399,7 +399,7 @@ def inject_css():
         ========================================================= */
         div[data-testid="stSelectbox"] label,
         div[data-testid="stMultiSelect"] label{
-        color: #1f5fd6 !important;     /* <-- troque aqui a cor */
+        color: #000000 !important;     /* <-- troque aqui a cor */
         font-weight: 800 !important;
         }
 
