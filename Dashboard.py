@@ -391,6 +391,24 @@ def inject_css():
         color: #777 !important;
         border-color: #d0d0d0 !important;
         }
+        
+        /* =========================================================
+        ✅ COR DOS LABELS (títulos) dos filtros por camada
+        - Selectbox: Setor (Empresas), Dependência (Educação), Unidade (Saúde)
+        - MultiSelect: Exibir Camadas Atingidas
+        ========================================================= */
+        div[data-testid="stSelectbox"] label,
+        div[data-testid="stMultiSelect"] label{
+        color: #1f5fd6 !important;     /* <-- troque aqui a cor */
+        font-weight: 800 !important;
+        }
+
+        /* garante que spans internos do label não fiquem com outra cor */
+        div[data-testid="stSelectbox"] label *,
+        div[data-testid="stMultiSelect"] label *{
+        color: #1f5fd6 !important;     /* <-- mesma cor */
+        }
+
 
 
         </style>
