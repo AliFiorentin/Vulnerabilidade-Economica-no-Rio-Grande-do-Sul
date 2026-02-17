@@ -366,22 +366,22 @@ def inject_css():
         ✅ BOTÃO DE DOWNLOAD (st.download_button)
         ========================================================= */
         div[data-testid="stDownloadButton"] > button{
-        background: #2b6fe8 !important;   /* cor do botão */
+        background: #163361 !important;   /* cor do botão */
         color: #ffffff !important;        /* cor do texto */
-        border: 1px solid #1f5fd6 !important;
+        border: 1px solid #163361 !important;
         border-radius: 10px !important;
         font-weight: 800 !important;
         }
 
         div[data-testid="stDownloadButton"] > button:hover{
-        background: #1f5fd6 !important;
-        border-color: #174fb8 !important;
+        background: #0D1E3A !important;
+        border-color: #0D1E3A !important;
         color: #ffffff !important;
         }
 
         div[data-testid="stDownloadButton"] > button:active{
-        background: #174fb8 !important;
-        border-color: #174fb8 !important;
+        background: #0D1E3A!important;
+        border-color: #0D1E3A !important;
         color: #ffffff !important;
         }
 
