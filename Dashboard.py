@@ -406,7 +406,7 @@ def inject_css():
         /* garante que spans internos do label não fiquem com outra cor */
         div[data-testid="stSelectbox"] label *,
         div[data-testid="stMultiSelect"] label *{
-        color: #1f5fd6 !important;     /* <-- mesma cor */
+        color: #000000 !important;     /* <-- mesma cor */
         }
 
 
