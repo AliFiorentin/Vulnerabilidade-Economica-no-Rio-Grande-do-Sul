@@ -154,21 +154,31 @@ def inject_css():
         html, body, .stApp { background:#fff !important; color:#000 !important; }
 
         /* =========================================================
-           ✅ SEU CSS ORIGINAL (MANTIDO)
+           ✅ LAYOUT / SPACING (SEU ORIGINAL)
         ========================================================= */
-        .block-container { padding-top: 2.1rem !important; padding-bottom: 0.9rem !important; padding-left: 1.0rem !important; padding-right: 1.0rem !important; }
+        .block-container {
+          padding-top: 2.1rem !important;
+          padding-bottom: 0.9rem !important;
+          padding-left: 1.0rem !important;
+          padding-right: 1.0rem !important;
+        }
         h1 { margin:0 !important; line-height:1.10 !important; }
 
         section[data-testid="stSidebar"][aria-expanded="true"] + div div[data-testid="stAppViewContainer"] .main .block-container{
           padding-left: 1.0rem !important;
           padding-right: 1.0rem !important;
         }
+
         section[data-testid="stSidebar"][aria-expanded="true"]{
-          width: 360px !important; min-width: 360px !important; max-width: 360px !important;
+          width: 360px !important;
+          min-width: 360px !important;
+          max-width: 360px !important;
           background:#fff !important;
         }
         section[data-testid="stSidebar"][aria-expanded="false"]{
-          width: 0px !important; min-width: 0px !important; max-width: 0px !important;
+          width: 0px !important;
+          min-width: 0px !important;
+          max-width: 0px !important;
           overflow: hidden !important;
         }
         section[data-testid="stSidebar"] * { color:#000 !important; }
@@ -183,9 +193,13 @@ def inject_css():
           overflow-y: auto !important;
         }
 
+        /* =========================================================
+           ✅ MENU (títulos custom)
+        ========================================================= */
         .menu-title{ font-size:22px; font-weight:800; margin:8px 0 10px 0; text-align:center; }
-        .menu-label{ font-size: 13px; font-weight: 700; color:#555 !important; margin: 10px 0 6px 0; }
+        .menu-label{ font-size: 13px; font-weight: 800; color:#000 !important; margin: 10px 0 6px 0; }
 
+        /* Logos sem borda */
         div[data-testid="stImage"], div[data-testid="stImage"] * , div[data-testid="stImage"] img{
           border: 0 !important;
           outline: 0 !important;
@@ -194,11 +208,23 @@ def inject_css():
           border-radius: 0 !important;
         }
         .menu-logos{ padding-top:12px !important; }
-        .menu-logos, .menu-logos *{ border:0 !important; outline:0 !important; box-shadow:none !important; background:transparent !important; }
+        .menu-logos, .menu-logos *{
+          border:0 !important;
+          outline:0 !important;
+          box-shadow:none !important;
+          background:transparent !important;
+        }
         .menu-logos div[data-testid="stVerticalBlock"],
         .menu-logos div[data-testid="stHorizontalBlock"],
-        .menu-logos div { border: 0 !important; outline: 0 !important; box-shadow: none !important; }
+        .menu-logos div{
+          border: 0 !important;
+          outline: 0 !important;
+          box-shadow: none !important;
+        }
 
+        /* =========================================================
+           ✅ SIDEBAR (Painel)
+        ========================================================= */
         .sb-title{ font-size: 30px; font-weight: 900; margin: -24px 0 4px 0; }
         .sb-total{ font-size: 14px; font-weight: 700; margin: 0 0 8px 0; }
 
@@ -244,6 +270,9 @@ def inject_css():
           white-space:nowrap;
         }
 
+        /* =========================================================
+           ✅ Inputs (BaseWeb) - base clara
+        ========================================================= */
         div[data-baseweb="select"] > div{
           background:#fff !important;
           color:#000 !important;
@@ -251,22 +280,14 @@ def inject_css():
           box-shadow: none !important;
         }
 
-        div[data-testid="stMultiSelect"] span[data-baseweb="tag"]{
-          background: #e8f1ff !important;
-          border: 1px solid #2b6fe8 !important;
-        }
-        div[data-testid="stMultiSelect"] span[data-baseweb="tag"] span{
-          color: #1f5fd6 !important;
-          font-weight: 800 !important;
-        }
-        div[data-testid="stMultiSelect"] span[data-baseweb="tag"] svg{ fill: #1f5fd6 !important; }
-
+        /* =========================================================
+           ✅ GAP / HR
+        ========================================================= */
         div[data-testid="stHorizontalBlock"]{ gap: 0.75rem !important; }
         section[data-testid="stSidebar"] hr { margin-top: 4px !important; margin-bottom: 6px !important; }
 
         /* =========================================================
            ✅ PATCH: HEADER/TOOLBAR BRANCO + ÍCONES OK
-           (SEM mexer no menu)
         ========================================================= */
         [data-testid="stHeader"],
         [data-testid="stToolbar"],
@@ -275,7 +296,6 @@ def inject_css():
           border-bottom: 1px solid #eaeaea !important;
         }
 
-        /* Não use regra global tipo: [data-testid="stHeader"] * { ... } */
         [data-testid="stHeader"] a,
         [data-testid="stHeader"] button,
         [data-testid="stHeader"] [role="button"],
@@ -288,7 +308,6 @@ def inject_css():
           color:#111 !important;
         }
 
-        /* SVGs do header: currentColor + stroke */
         [data-testid="stHeader"] svg,
         [data-testid="stToolbar"] svg,
         [data-testid="stAppToolbar"] svg{
@@ -308,13 +327,8 @@ def inject_css():
         }
 
         /* =========================================================
-           ✅ FIX DEFINITIVO — MULTISELECT (BaseWeb portal + dropdown)
-           Resolve:
-           - placeholder branco
-           - texto selecionado branco
-           - dropdown escuro/preto (portal)
+           ✅ MULTISELECT (portal + dropdown) - FIX DEFINITIVO
         ========================================================= */
-
         /* Controle do multiselect (caixa) */
         div[data-testid="stMultiSelect"] [data-baseweb="select"]{
           background:#fff !important;
@@ -336,7 +350,7 @@ def inject_css():
           opacity: 1 !important;
         }
 
-        /* Dropdown (renderiza em portal/popover fora do container) */
+        /* Dropdown (portal/popover) */
         div[data-baseweb="popover"]{
           background:#fff !important;
         }
@@ -361,55 +375,88 @@ def inject_css():
           -webkit-text-fill-color:#111 !important;
           opacity: 1 !important;
         }
-        
+
         /* =========================================================
-        ✅ BOTÃO DE DOWNLOAD (st.download_button)
+           ✅ BOTÃO DE DOWNLOAD (st.download_button)
         ========================================================= */
         div[data-testid="stDownloadButton"] > button{
-        background: #163361 !important;   /* cor do botão */
-        color: #ffffff !important;        /* cor do texto */
-        border: 1px solid #163361 !important;
-        border-radius: 10px !important;
-        font-weight: 800 !important;
+          background: #163361 !important;
+          color: #ffffff !important;
+          border: 1px solid #163361 !important;
+          border-radius: 10px !important;
+          font-weight: 800 !important;
         }
 
         div[data-testid="stDownloadButton"] > button:hover{
-        background: #0D1E3A !important;
-        border-color: #0D1E3A !important;
-        color: #ffffff !important;
+          background: #0D1E3A !important;
+          border-color: #0D1E3A !important;
+          color: #ffffff !important;
         }
 
         div[data-testid="stDownloadButton"] > button:active{
-        background: #0D1E3A!important;
-        border-color: #0D1E3A !important;
-        color: #ffffff !important;
+          background: #0D1E3A !important;
+          border-color: #0D1E3A !important;
+          color: #ffffff !important;
         }
 
-        /* estado desabilitado (quando não tem arquivo) */
         div[data-testid="stDownloadButton"] > button:disabled{
-        background: #e6e6e6 !important;
-        color: #777 !important;
-        border-color: #d0d0d0 !important;
+          background: #e6e6e6 !important;
+          color: #777 !important;
+          border-color: #d0d0d0 !important;
         }
-        
+
         /* =========================================================
-        ✅ COR DOS LABELS (títulos) dos filtros por camada
-        - Selectbox: Setor (Empresas), Dependência (Educação), Unidade (Saúde)
-        - MultiSelect: Exibir Camadas Atingidas
+           ✅ LABELS (Selectbox + MultiSelect) - PRETO
         ========================================================= */
         div[data-testid="stSelectbox"] label,
         div[data-testid="stMultiSelect"] label{
-        color: #000000 !important;     /* <-- troque aqui a cor */
-        font-weight: 800 !important;
+          color: #000 !important;
+          font-weight: 800 !important;
         }
-
-        /* garante que spans internos do label não fiquem com outra cor */
         div[data-testid="stSelectbox"] label *,
         div[data-testid="stMultiSelect"] label *{
-        color: #000000 !important;     /* <-- mesma cor */
+          color: #000 !important;
         }
 
+        /* =========================================================
+           ✅ MENU: TUDO PRETO (use junto com wrapper .menu-wrap)
+           - Se você envolver o menu com <div class="menu-wrap"> ... </div>
+           - garante texto preto em captions/alerts/qualquer coisa
+        ========================================================= */
+        .menu-wrap, .menu-wrap *{
+          color: #000 !important;
+          -webkit-text-fill-color: #000 !important;
+        }
 
+        /* manter texto do botão de download branco mesmo dentro do menu-wrap */
+        .menu-wrap div[data-testid="stDownloadButton"] > button,
+        .menu-wrap div[data-testid="stDownloadButton"] > button *{
+          color:#fff !important;
+          -webkit-text-fill-color:#fff !important;
+        }
+
+        /* placeholder cinza dentro do menu */
+        .menu-wrap div[data-testid="stSelectbox"] input::placeholder,
+        .menu-wrap div[data-testid="stMultiSelect"] input::placeholder,
+        .menu-wrap div[data-testid="stMultiSelect"] [class*="Placeholder"],
+        .menu-wrap div[data-testid="stMultiSelect"] [class*="placeholder"]{
+          color:#666 !important;
+          -webkit-text-fill-color:#666 !important;
+        }
+
+        /* tags do multiselect no menu: tudo preto (sem azul) */
+        .menu-wrap div[data-testid="stMultiSelect"] span[data-baseweb="tag"]{
+          background: #f2f2f2 !important;
+          border: 1px solid #d0d0d0 !important;
+        }
+        .menu-wrap div[data-testid="stMultiSelect"] span[data-baseweb="tag"] span{
+          color: #000 !important;
+          -webkit-text-fill-color:#000 !important;
+          font-weight: 800 !important;
+        }
+        .menu-wrap div[data-testid="stMultiSelect"] span[data-baseweb="tag"] svg{
+          fill: #000 !important;
+        }
 
         </style>
         """,
@@ -418,6 +465,7 @@ def inject_css():
 
     # reforço no head do browser (ajuda em alguns navegadores)
     st.markdown('<meta name="color-scheme" content="light">', unsafe_allow_html=True)
+
 
 
 # =========================
