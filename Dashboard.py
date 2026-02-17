@@ -124,11 +124,13 @@ def is_placeholder(val: str, placeholder: str) -> bool:
 # LOGOS (ROBUSTO)
 # =========================
 def find_logo(app_dir: Path, names: list[str], contains: str | None = None) -> Path | None:
+    # tenta nomes exatos
     for n in names:
         p = app_dir / n
         if p.exists():
             return p
 
+    # fallback: procura por substring (case-insensitive)
     if contains:
         for ext in ("*.png", "*.PNG", "*.jpg", "*.JPG", "*.jpeg", "*.JPEG", "*.webp", "*.WEBP"):
             for p in app_dir.glob(ext):
@@ -145,27 +147,11 @@ def inject_css():
         """
         <style>
         /* =========================================================
-           ✅ FORÇAR LIGHT (opcional)
-           - Se quiser usar SOMENTE config.toml, remova este bloco
+           ✅ FORÇAR LIGHT (SEM ALTERAR SEU MENU)
+           - Deixa o app light mesmo com sistema dark
         ========================================================= */
         :root { color-scheme: light !important; }
         html, body, .stApp { background:#fff !important; color:#000 !important; }
-
-        /* =========================================================
-           ✅ DESLIGAR SCROLL DA PÁGINA
-           - Quem rola: menu-box e sidebar
-        ========================================================= */
-        html, body { height: 100% !important; overflow: hidden !important; }
-        .stApp { height: 100vh !important; overflow: hidden !important; }
-
-        div[data-testid="stAppViewContainer"]{
-          height: 100vh !important;
-          overflow: hidden !important;
-        }
-        div[data-testid="stAppViewContainer"] .main{
-          height: 100vh !important;
-          overflow: hidden !important;
-        }
 
         /* =========================================================
            ✅ LAYOUT / SPACING (SEU ORIGINAL)
@@ -196,19 +182,8 @@ def inject_css():
           overflow: hidden !important;
         }
         section[data-testid="stSidebar"] * { color:#000 !important; }
-        section[data-testid="stSidebar"] div[data-testid="stSidebarContent"]{
-          padding-top: 0.2rem !important;
-        }
+        section[data-testid="stSidebar"] div[data-testid="stSidebarContent"]{ padding-top: 0.2rem !important; }
 
-        /* Sidebar rolável (painel) */
-        section[data-testid="stSidebar"] div[data-testid="stSidebarContent"]{
-          height: calc(100vh - 3.5rem) !important;
-          overflow-y: auto !important;
-        }
-
-        /* =========================================================
-           ✅ CARD DO PAINEL (sua borda do painel central)
-        ========================================================= */
         .block-container > div[data-testid="stHorizontalBlock"] > div:nth-child(2) > div[data-testid="stVerticalBlock"]{
           border: 2px solid #111 !important;
           border-radius: 12px !important;
@@ -216,32 +191,6 @@ def inject_css():
           background:#fff !important;
           max-height: 680px !important;
           overflow-y: auto !important;
-        }
-
-        /* =========================================================
-           ✅ MENU “BOX” FIXA + SCROLL INTERNO
-           - menu-scroll rola, menu-footer fica fixo
-        ========================================================= */
-        .menu-box{
-          border: 2px solid #111 !important;
-          border-radius: 12px !important;
-          background: #fff !important;
-          height: calc(100vh - 120px) !important; /* ajuste fino se quiser */
-          overflow: hidden !important;
-          display: flex !important;
-          flex-direction: column !important;
-          padding: 14px 12px 12px 12px !important;
-        }
-        .menu-scroll{
-          flex: 1 1 auto !important;
-          overflow-y: auto !important;
-          padding-right: 6px !important;
-        }
-        .menu-footer{
-          flex: 0 0 auto !important;
-          border-top: 1px solid #e6e6e6 !important;
-          padding-top: 10px !important;
-          margin-top: 10px !important;
         }
 
         /* =========================================================
@@ -380,16 +329,19 @@ def inject_css():
         /* =========================================================
            ✅ MULTISELECT (portal + dropdown) - FIX DEFINITIVO
         ========================================================= */
+        /* Controle do multiselect (caixa) */
         div[data-testid="stMultiSelect"] [data-baseweb="select"]{
           background:#fff !important;
         }
 
+        /* Texto dentro da caixa (valor/seleção) */
         div[data-testid="stMultiSelect"] [data-baseweb="select"] *{
           color:#111 !important;
           -webkit-text-fill-color:#111 !important;
           opacity: 1 !important;
         }
 
+        /* Placeholder (cinza legível) */
         div[data-testid="stMultiSelect"] [data-baseweb="select"] [class*="Placeholder"],
         div[data-testid="stMultiSelect"] [data-baseweb="select"] [class*="placeholder"],
         div[data-testid="stMultiSelect"] [data-baseweb="select"] input::placeholder{
@@ -398,6 +350,7 @@ def inject_css():
           opacity: 1 !important;
         }
 
+        /* Dropdown (portal/popover) */
         div[data-baseweb="popover"]{
           background:#fff !important;
         }
@@ -466,13 +419,43 @@ def inject_css():
         }
 
         /* =========================================================
-           ✅ MAPA FIXO (st_folium)
-           - Garante que NÃO estique até o fim da página
+           ✅ MENU: TUDO PRETO (use junto com wrapper .menu-wrap)
+           - Se você envolver o menu com <div class="menu-wrap"> ... </div>
+           - garante texto preto em captions/alerts/qualquer coisa
         ========================================================= */
-        div[data-testid="stFolium"],
-        div[data-testid="stFolium"] iframe{
-          height: 660px !important;
-          max-height: 660px !important;
+        .menu-wrap, .menu-wrap *{
+          color: #000 !important;
+          -webkit-text-fill-color: #000 !important;
+        }
+
+        /* manter texto do botão de download branco mesmo dentro do menu-wrap */
+        .menu-wrap div[data-testid="stDownloadButton"] > button,
+        .menu-wrap div[data-testid="stDownloadButton"] > button *{
+          color:#fff !important;
+          -webkit-text-fill-color:#fff !important;
+        }
+
+        /* placeholder cinza dentro do menu */
+        .menu-wrap div[data-testid="stSelectbox"] input::placeholder,
+        .menu-wrap div[data-testid="stMultiSelect"] input::placeholder,
+        .menu-wrap div[data-testid="stMultiSelect"] [class*="Placeholder"],
+        .menu-wrap div[data-testid="stMultiSelect"] [class*="placeholder"]{
+          color:#666 !important;
+          -webkit-text-fill-color:#666 !important;
+        }
+
+        /* tags do multiselect no menu: tudo preto (sem azul) */
+        .menu-wrap div[data-testid="stMultiSelect"] span[data-baseweb="tag"]{
+          background: #f2f2f2 !important;
+          border: 1px solid #d0d0d0 !important;
+        }
+        .menu-wrap div[data-testid="stMultiSelect"] span[data-baseweb="tag"] span{
+          color: #000 !important;
+          -webkit-text-fill-color:#000 !important;
+          font-weight: 800 !important;
+        }
+        .menu-wrap div[data-testid="stMultiSelect"] span[data-baseweb="tag"] svg{
+          fill: #000 !important;
         }
 
         </style>
@@ -480,7 +463,9 @@ def inject_css():
         unsafe_allow_html=True,
     )
 
+    # reforço no head do browser (ajuda em alguns navegadores)
     st.markdown('<meta name="color-scheme" content="light">', unsafe_allow_html=True)
+
 
 
 # =========================
@@ -1616,11 +1601,9 @@ if "selected_cenario" not in st.session_state:
 
 col_map, col_menu = st.columns([5.15, 1.35], gap="small")
 
-# MENU (direita) — box fixa + scroll interno + rodapé fixo
+# MENU (direita)
 with col_menu:
-    st.markdown('<div class="menu-box">', unsafe_allow_html=True)
-    st.markdown('<div class="menu-scroll">', unsafe_allow_html=True)
-
+    # ✅ logos robustos (não depende de nome exato)
     BID_LOGO = find_logo(APP_DIR, ["BID.png", "bid.png", "BID.PNG", "bid.PNG"], contains="bid")
     GPEA_LOGO = find_logo(APP_DIR, ["GPEa.png", "GPEA.png", "gpea.png", "GPEa.PNG", "GPEA.PNG"], contains="gpea")
 
@@ -1755,29 +1738,7 @@ with col_menu:
     else:
         st.session_state["filtro_tipo_saude"] = "(todas)"
 
-    st.markdown("</div>", unsafe_allow_html=True)  # fecha menu-scroll
-
-    # Rodapé fixo do menu (download)
-    st.markdown('<div class="menu-footer">', unsafe_allow_html=True)
-
-    mun_sel = st.session_state.selected_mun
-    cen_sel = st.session_state.selected_cenario
-    layers_sel = st.session_state.get("layers_multiselect", []) or []
-
-    setor_sel2 = st.session_state.get("filtro_setor_empresas", "(todos)")
-    dep_sel2 = st.session_state.get("filtro_dep_escolas", "(todas)")
-    tipo_sel2 = st.session_state.get("filtro_tipo_saude", "(todas)")
-
-    can_export = bool(mun_sel) and (len(layers_sel) > 0)
-
-    if not mun_sel:
-        st.info("Para exportar: selecione um Município e ao menos 1 Camada.")
-    elif len(layers_sel) == 0:
-        st.info("Para exportar: selecione ao menos 1 Camada em 'Exibir Camadas Atingidas'.")
-
-    st.markdown("</div>", unsafe_allow_html=True)  # fecha menu-footer
-    st.markdown("</div>", unsafe_allow_html=True)  # fecha menu-box
-
+    st.markdown("---")
 
 layers = st.session_state.get("layers_multiselect", []) or []
 
@@ -1842,7 +1803,9 @@ if show_delta and cenario_gdf is not None:
     if "Saúde" in layers:
         sau_hits = points_in_polygon(gdf_sau_f, cenario_gdf)
 
-# MAPA
+# =========================
+# ✅ MAPA memoizado em session_state
+# =========================
 with col_map:
     if show_delta and cenario_gdf is not None:
         gdf_emp_show = emp_hits if "Empresas" in layers else None
@@ -1889,20 +1852,20 @@ with col_map:
         returned_objects=[],
     )
 
-    st.markdown(
-        """
-        <div style="
-            margin-top: -6px;
-            margin-bottom: 4px;
-            font-size: 0.75rem;
-            color: #666;
-            text-align: left;
-        ">
-            ℹ️ Os pontos no mapa foram interpolados através da API do Google com base no endereço cadastrado em cada base de dados; pontos com discrepâncias foram removidos.
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+st.markdown(
+    """
+    <div style="
+        margin-top: -6px;
+        margin-bottom: 4px;
+        font-size: 0.75rem;
+        color: #666;
+        text-align: left;
+    ">
+        ℹ️ Os pontos no mapa foram interpolados através da API do Google com base no endereço cadastrado em cada base de dados; pontos com discrepâncias foram removidos.
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
 # SIDEBAR (painel)
 if show_delta and cenario_gdf is not None:
@@ -1945,81 +1908,84 @@ else:
         gdf_edu_imp=gdf_edu_f if ("Educação" in layers) else gpd.GeoDataFrame(),
     )
 
-# Download (precisa ficar depois do cálculo de cenário/hits)
-# - renderiza no rodapé fixo do menu (já criado), então colocamos o botão via placeholder:
+# =========================
+# BOTÃO DE DOWNLOAD (FINAL DO MENU) — ESTÁVEL E SEM TRAVAR
+# =========================
 with col_menu:
-    # recria a âncora no mesmo container visual do menu-box (Streamlit reordena, então usamos st.empty())
-    pass
+    mun_sel = st.session_state.selected_mun
+    cen_sel = st.session_state.selected_cenario
+    layers_sel = st.session_state.get("layers_multiselect", []) or []
 
-# Render do botão (usa os mesmos estados)
-mun_sel = st.session_state.selected_mun
-cen_sel = st.session_state.selected_cenario
-layers_sel = st.session_state.get("layers_multiselect", []) or []
+    setor_sel2 = st.session_state.get("filtro_setor_empresas", "(todos)")
+    dep_sel2 = st.session_state.get("filtro_dep_escolas", "(todas)")
+    tipo_sel2 = st.session_state.get("filtro_tipo_saude", "(todas)")
 
-can_export = bool(mun_sel) and (len(layers_sel) > 0)
+    can_export = bool(mun_sel) and (len(layers_sel) > 0)
 
-if can_export:
-    has_cenario = bool(cen_sel) and bool(show_delta) and (cenario_gdf is not None)
-    if (cen_sel is not None) and (str(cen_sel).strip() != "") and (not has_cenario):
-        st.warning("Cenário selecionado, mas não foi possível carregá-lo. Exportando apenas o Total.")
+    if not mun_sel:
+        st.info("Para exportar: selecione um Município e ao menos 1 Camada.")
+    elif len(layers_sel) == 0:
+        st.info("Para exportar: selecione ao menos 1 Camada em 'Exibir Camadas Atingidas'.")
 
-    export_sig = (
-        str(mun_sel),
-        str(cen_sel) if cen_sel else "",
-        bool(has_cenario),
-        tuple(layers_sel),
-        str(setor_sel),
-        str(dep_sel),
-        str(tipo_sel),
-    )
+    if can_export:
+        has_cenario = bool(cen_sel) and bool(show_delta) and (cenario_gdf is not None)
+        if (cen_sel is not None) and (str(cen_sel).strip() != "") and (not has_cenario):
+            st.warning("Cenário selecionado, mas não foi possível carregá-lo. Exportando apenas o Total.")
 
-    sig_key = hashlib.md5(repr(export_sig).encode("utf-8")).hexdigest()
-
-    if st.session_state.get("export_sig") != export_sig:
-        st.session_state["export_sig"] = export_sig
-        st.session_state["export_ready"] = False
-        st.session_state["export_xlsx_bytes"] = None
-        st.session_state["export_file_name"] = None
-
-        with st.spinner("Preparando arquivo para download..."):
-            emp_imp2 = empresas_metrics(emp_hits) if (has_cenario and emp_hits is not None and ("Empresas" in layers_sel)) else None
-            edu_imp2 = educacao_metrics(edu_hits) if (has_cenario and edu_hits is not None and ("Educação" in layers_sel)) else None
-            sau_imp2 = saude_metrics(sau_hits) if (has_cenario and ("Saúde" in layers_sel) and sau_hits is not None) else None
-
-            df_export = build_export_df(
-                municipio=mun_sel,
-                cenario_nome=(cen_sel if has_cenario else None),
-                layers_sel=layers_sel,
-                emp_base=emp_base, edu_base=edu_base, sau_base=sau_base,
-                emp_imp=emp_imp2, edu_imp=edu_imp2, sau_imp=sau_imp2,
-                gdf_edu_total=gdf_edu_f if ("Educação" in layers_sel) else None,
-                gdf_edu_imp=edu_hits if (has_cenario and ("Educação" in layers_sel) and edu_hits is not None) else None,
-                gdf_sau_total=gdf_sau_f if ("Saúde" in layers_sel) else None,
-                gdf_sau_imp=sau_hits if (has_cenario and ("Saúde" in layers_sel) and sau_hits is not None) else None,
-                show_delta=has_cenario,
-            )
-
-            layers_tag = "-".join([re.sub(r"[^A-Za-z0-9]+", "", x) for x in layers_sel])[:40]
-            cen_tag = re.sub(r"[^A-Za-z0-9]+", "_", str(cen_sel)) if has_cenario else "Total"
-            file_name = f"Tabela_{re.sub(r'[^A-Za-z0-9]+','_',mun_sel)}_{cen_tag}_{layers_tag}.xlsx"
-
-            xlsx_bytes = export_df_to_xlsx_bytes(df_export, sheet_name=mun_sel)
-
-            st.session_state["export_xlsx_bytes"] = xlsx_bytes
-            st.session_state["export_file_name"] = file_name
-            st.session_state["export_ready"] = True
-
-    # botão aparece no layout normal; visualmente ele “encaixa” no menu footer
-    # (o CSS deixa o menu footer fixo; o Streamlit renderiza onde está no DOM)
-    if st.session_state.get("export_ready") and st.session_state.get("export_xlsx_bytes"):
-        st.download_button(
-            label="⬇️ Baixar Tabela (XLSX)",
-            data=st.session_state["export_xlsx_bytes"],
-            file_name=st.session_state["export_file_name"],
-            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            use_container_width=True,
-            key=f"dl_{sig_key}",
+        export_sig = (
+            str(mun_sel),
+            str(cen_sel) if cen_sel else "",
+            bool(has_cenario),
+            tuple(layers_sel),
+            str(setor_sel2),
+            str(dep_sel2),
+            str(tipo_sel2),
         )
-else:
-    # não exportável: não renderiza botão
-    pass
+
+        sig_key = hashlib.md5(repr(export_sig).encode("utf-8")).hexdigest()
+
+        if st.session_state.get("export_sig") != export_sig:
+            st.session_state["export_sig"] = export_sig
+            st.session_state["export_ready"] = False
+            st.session_state["export_xlsx_bytes"] = None
+            st.session_state["export_file_name"] = None
+
+            with st.spinner("Preparando arquivo para download..."):
+                emp_imp2 = empresas_metrics(emp_hits) if (has_cenario and emp_hits is not None and ("Empresas" in layers_sel)) else None
+                edu_imp2 = educacao_metrics(edu_hits) if (has_cenario and edu_hits is not None and ("Educação" in layers_sel)) else None
+                sau_imp2 = saude_metrics(sau_hits) if (has_cenario and ("Saúde" in layers_sel) and sau_hits is not None) else None
+
+                df_export = build_export_df(
+                    municipio=mun_sel,
+                    cenario_nome=(cen_sel if has_cenario else None),
+                    layers_sel=layers_sel,
+                    emp_base=emp_base, edu_base=edu_base, sau_base=sau_base,
+                    emp_imp=emp_imp2, edu_imp=edu_imp2, sau_imp=sau_imp2,
+                    gdf_edu_total=gdf_edu_f if ("Educação" in layers_sel) else None,
+                    gdf_edu_imp=edu_hits if (has_cenario and ("Educação" in layers_sel) and edu_hits is not None) else None,
+                    gdf_sau_total=gdf_sau_f if ("Saúde" in layers_sel) else None,
+                    gdf_sau_imp=sau_hits if (has_cenario and ("Saúde" in layers_sel) and sau_hits is not None) else None,
+                    show_delta=has_cenario,
+                )
+
+                layers_tag = "-".join([re.sub(r"[^A-Za-z0-9]+", "", x) for x in layers_sel])[:40]
+                cen_tag = re.sub(r"[^A-Za-z0-9]+", "_", str(cen_sel)) if has_cenario else "Total"
+                file_name = f"Tabela_{re.sub(r'[^A-Za-z0-9]+','_',mun_sel)}_{cen_tag}_{layers_tag}.xlsx"
+
+                xlsx_bytes = export_df_to_xlsx_bytes(df_export, sheet_name=mun_sel)
+
+                st.session_state["export_xlsx_bytes"] = xlsx_bytes
+                st.session_state["export_file_name"] = file_name
+                st.session_state["export_ready"] = True
+
+        if st.session_state.get("export_ready") and st.session_state.get("export_xlsx_bytes"):
+            st.download_button(
+                label="⬇️ Baixar Tabela (XLSX)",
+                data=st.session_state["export_xlsx_bytes"],
+                file_name=st.session_state["export_file_name"],
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                use_container_width=True,
+                key=f"dl_{sig_key}",
+            )
+        else:
+            st.info("Ajuste filtros/cenário/camadas para gerar o arquivo.")
