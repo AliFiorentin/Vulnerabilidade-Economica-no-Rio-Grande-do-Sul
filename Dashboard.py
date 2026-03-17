@@ -79,7 +79,7 @@ RS_CENTER = (-30.35, -53.35)
 RS_ZOOM = 6.5
 
 MUNICIPIO_VIEW = {
-    "Eldorado do Sul": {"center": (-30.0840, -51.6180), "zoom": 12},
+    "Eldorado do Sul": {"center": (-30.0540, -51.4280), "zoom": 12},
     "Lajeado": {"center": (-29.4585, -51.9953), "zoom": 12.5},
     "Porto Alegre": {"center": (-30.1051, -51.1500), "zoom": 11},
     "Rio Grande": {"center": (-32.0650, -52.1200), "zoom": 12.5},
