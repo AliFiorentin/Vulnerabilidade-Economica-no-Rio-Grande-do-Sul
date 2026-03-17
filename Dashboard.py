@@ -453,24 +453,30 @@ def inject_css():
           -webkit-text-fill-color:#666 !important;
         }
 
-        /* tags do multiselect no menu: tudo preto (sem azul) */
+        /* tags do multiselect no menu */
         .menu-wrap div[data-testid="stMultiSelect"] span[data-baseweb="tag"]{
-          background: #f2f2f2 !important;
-          border: 1px solid #d0d0d0 !important;
+          background: #163361 !important;
+          border: 1px solid #163361 !important;
         }
-        .menu-wrap div[data-testid="stMultiSelect"] span[data-baseweb="tag"] span{
-          color: #000 !important;
-          -webkit-text-fill-color:#000 !important;
+        .menu-wrap div[data-testid="stMultiSelect"] span[data-baseweb="tag"],
+        .menu-wrap div[data-testid="stMultiSelect"] span[data-baseweb="tag"] *{
+          color: #ffffff !important;
+          -webkit-text-fill-color:#ffffff !important;
           font-weight: 800 !important;
         }
-        .menu-wrap div[data-testid="stMultiSelect"] span[data-baseweb="tag"] svg{
-          fill: #000 !important;
+        .menu-wrap div[data-testid="stMultiSelect"] span[data-baseweb="tag"] svg,
+        .menu-wrap div[data-testid="stMultiSelect"] span[data-baseweb="tag"] svg *{
+          fill: #ffffff !important;
+          stroke: #ffffff !important;
         }
 
         </style>
         """,
         unsafe_allow_html=True,
     )
+
+    # reforço no head do browser (ajuda em alguns navegadores)
+    st.markdown('<meta name="color-scheme" content="light">', unsafe_allow_html=True)
 
     # reforço no head do browser (ajuda em alguns navegadores)
     st.markdown('<meta name="color-scheme" content="light">', unsafe_allow_html=True)
