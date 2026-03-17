@@ -157,13 +157,12 @@ def inject_css():
         <style>
         /* =========================================================
            ✅ FORÇAR LIGHT (SEM ALTERAR SEU MENU)
-           - Deixa o app light mesmo com sistema dark
         ========================================================= */
         :root { color-scheme: light !important; }
         html, body, .stApp { background:#fff !important; color:#000 !important; }
 
         /* =========================================================
-           ✅ LAYOUT / SPACING (SEU ORIGINAL)
+           ✅ LAYOUT / SPACING
         ========================================================= */
         .block-container {
           padding-top: 2.1rem !important;
@@ -203,18 +202,28 @@ def inject_css():
         }
 
         /* =========================================================
-           ✅ MENU (títulos custom)
+           ✅ MENU
         ========================================================= */
-        .menu-title{ font-size:22px; font-weight:800; margin:8px 0 10px 0; text-align:center; }
-        .menu-label{ font-size: 13px; font-weight: 800; color:#000 !important; margin: 10px 0 6px 0; }
+        .menu-title{
+          font-size:22px;
+          font-weight:800;
+          margin:8px 0 10px 0;
+          text-align:center;
+        }
+        .menu-label{
+          font-size:13px;
+          font-weight:800;
+          color:#000 !important;
+          margin:10px 0 6px 0;
+        }
 
         /* Logos sem borda */
-        div[data-testid="stImage"], div[data-testid="stImage"] * , div[data-testid="stImage"] img{
-          border: 0 !important;
-          outline: 0 !important;
-          box-shadow: none !important;
-          background: transparent !important;
-          border-radius: 0 !important;
+        div[data-testid="stImage"], div[data-testid="stImage"] *, div[data-testid="stImage"] img{
+          border:0 !important;
+          outline:0 !important;
+          box-shadow:none !important;
+          background:transparent !important;
+          border-radius:0 !important;
         }
         .menu-logos{ padding-top:12px !important; }
         .menu-logos, .menu-logos *{
@@ -226,37 +235,37 @@ def inject_css():
         .menu-logos div[data-testid="stVerticalBlock"],
         .menu-logos div[data-testid="stHorizontalBlock"],
         .menu-logos div{
-          border: 0 !important;
-          outline: 0 !important;
-          box-shadow: none !important;
+          border:0 !important;
+          outline:0 !important;
+          box-shadow:none !important;
         }
 
         /* =========================================================
            ✅ SIDEBAR (Painel)
         ========================================================= */
-        .sb-title{ font-size: 30px; font-weight: 900; margin: -24px 0 4px 0; }
-        .sb-total{ font-size: 14px; font-weight: 700; margin: 0 0 8px 0; }
+        .sb-title{ font-size:30px; font-weight:900; margin:-24px 0 4px 0; }
+        .sb-total{ font-size:14px; font-weight:700; margin:0 0 8px 0; }
 
         .sb-section{
-          font-size: 18px;
-          font-weight: 900;
-          margin: 12px 0 8px 0;
-          text-align: center;
+          font-size:18px;
+          font-weight:900;
+          margin:12px 0 8px 0;
+          text-align:center;
         }
         .sb-section .sb-ico{
-          display: inline-block;
-          margin-right: 8px;
-          font-size: 18px;
-          line-height: 1;
-          vertical-align: middle;
+          display:inline-block;
+          margin-right:8px;
+          font-size:18px;
+          line-height:1;
+          vertical-align:middle;
         }
         .sb-subtitle{
-          margin-top: 14px;
-          margin-bottom: 6px;
-          font-weight: 900;
+          margin-top:14px;
+          margin-bottom:6px;
+          font-weight:900;
         }
 
-        .kpi-grid{ display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .kpi-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
         .kpi-card{
           border:1px solid #e6e6e6;
           border-radius:12px;
@@ -280,29 +289,32 @@ def inject_css():
         }
 
         /* =========================================================
-           ✅ Inputs (BaseWeb) - base clara
+           ✅ Inputs (BaseWeb)
         ========================================================= */
         div[data-baseweb="select"] > div{
           background:#fff !important;
           color:#000 !important;
-          border: 1px solid #d9d9d9 !important;
-          box-shadow: none !important;
+          border:1px solid #d9d9d9 !important;
+          box-shadow:none !important;
         }
 
         /* =========================================================
            ✅ GAP / HR
         ========================================================= */
-        div[data-testid="stHorizontalBlock"]{ gap: 0.75rem !important; }
-        section[data-testid="stSidebar"] hr { margin-top: 4px !important; margin-bottom: 6px !important; }
+        div[data-testid="stHorizontalBlock"]{ gap:0.75rem !important; }
+        section[data-testid="stSidebar"] hr{
+          margin-top:4px !important;
+          margin-bottom:6px !important;
+        }
 
         /* =========================================================
-           ✅ PATCH: HEADER/TOOLBAR BRANCO + ÍCONES OK
+           ✅ HEADER/TOOLBAR
         ========================================================= */
         [data-testid="stHeader"],
         [data-testid="stToolbar"],
         [data-testid="stAppToolbar"]{
           background:#ffffff !important;
-          border-bottom: 1px solid #eaeaea !important;
+          border-bottom:1px solid #eaeaea !important;
         }
 
         [data-testid="stHeader"] a,
@@ -321,52 +333,89 @@ def inject_css():
         [data-testid="stToolbar"] svg,
         [data-testid="stAppToolbar"] svg{
           color:#111 !important;
-          opacity: 1 !important;
+          opacity:1 !important;
         }
         [data-testid="stHeader"] svg *,
         [data-testid="stToolbar"] svg *,
         [data-testid="stAppToolbar"] svg *{
           stroke:#111 !important;
-          fill: currentColor !important;
+          fill:currentColor !important;
         }
         [data-testid="stHeader"] svg path[fill="none"],
         [data-testid="stToolbar"] svg path[fill="none"],
         [data-testid="stAppToolbar"] svg path[fill="none"]{
-          fill: none !important;
+          fill:none !important;
         }
 
         /* =========================================================
-           ✅ MULTISELECT (portal + dropdown) - FIX DEFINITIVO
+           ✅ MULTISELECT - caixa principal
         ========================================================= */
-        /* Controle do multiselect (caixa) */
         div[data-testid="stMultiSelect"] [data-baseweb="select"]{
           background:#fff !important;
         }
 
-        /* Texto dentro da caixa (valor/seleção) */
-        div[data-testid="stMultiSelect"] [data-baseweb="select"] *{
+        div[data-testid="stMultiSelect"] [data-baseweb="select"] input{
           color:#111 !important;
           -webkit-text-fill-color:#111 !important;
-          opacity: 1 !important;
         }
 
-        /* Placeholder (cinza legível) */
+        div[data-testid="stMultiSelect"] [data-baseweb="select"] input::placeholder,
         div[data-testid="stMultiSelect"] [data-baseweb="select"] [class*="Placeholder"],
-        div[data-testid="stMultiSelect"] [data-baseweb="select"] [class*="placeholder"],
-        div[data-testid="stMultiSelect"] [data-baseweb="select"] input::placeholder{
+        div[data-testid="stMultiSelect"] [data-baseweb="select"] [class*="placeholder"]{
           color:#666 !important;
           -webkit-text-fill-color:#666 !important;
-          opacity: 1 !important;
+          opacity:1 !important;
         }
 
-        /* Dropdown (portal/popover) */
+        /* =========================================================
+           ✅ TAGS SELECIONADAS DO MULTISELECT
+           - fundo azul
+           - texto branco
+           - X branco
+        ========================================================= */
+        div[data-testid="stMultiSelect"] span[data-baseweb="tag"]{
+          background:#163361 !important;
+          border:1px solid #163361 !important;
+          border-radius:8px !important;
+        }
+
+        div[data-testid="stMultiSelect"] span[data-baseweb="tag"] span,
+        div[data-testid="stMultiSelect"] span[data-baseweb="tag"] strong,
+        div[data-testid="stMultiSelect"] span[data-baseweb="tag"] div{
+          color:#ffffff !important;
+          -webkit-text-fill-color:#ffffff !important;
+          font-weight:800 !important;
+        }
+
+        div[data-testid="stMultiSelect"] span[data-baseweb="tag"] svg{
+          fill:#ffffff !important;
+          color:#ffffff !important;
+          stroke:#ffffff !important;
+        }
+
+        div[data-testid="stMultiSelect"] span[data-baseweb="tag"] svg *{
+          fill:#ffffff !important;
+          color:#ffffff !important;
+          stroke:#ffffff !important;
+        }
+
+        /* Botão/ícone de remoção dentro da tag */
+        div[data-testid="stMultiSelect"] span[data-baseweb="tag"] [role="button"],
+        div[data-testid="stMultiSelect"] span[data-baseweb="tag"] button{
+          color:#ffffff !important;
+        }
+
+        /* =========================================================
+           ✅ Dropdown do multiselect
+           - opções não selecionadas continuam pretas
+        ========================================================= */
         div[data-baseweb="popover"]{
           background:#fff !important;
         }
         div[data-baseweb="popover"] [role="listbox"]{
           background:#fff !important;
           color:#111 !important;
-          border: 1px solid #d9d9d9 !important;
+          border:1px solid #d9d9d9 !important;
         }
         div[data-baseweb="popover"] [role="option"]{
           background:#fff !important;
@@ -379,101 +428,61 @@ def inject_css():
           background:#e8f1ff !important;
           color:#111 !important;
         }
-        div[data-baseweb="popover"] [role="option"] *{
+        div[data-baseweb="popover"] [role="option"] *,
+        div[data-baseweb="popover"] [aria-selected="true"] *{
           color:#111 !important;
           -webkit-text-fill-color:#111 !important;
-          opacity: 1 !important;
+          opacity:1 !important;
         }
 
         /* =========================================================
-           ✅ BOTÃO DE DOWNLOAD (st.download_button)
+           ✅ BOTÃO DOWNLOAD
         ========================================================= */
         div[data-testid="stDownloadButton"] > button{
-          background: #163361 !important;
-          color: #ffffff !important;
-          border: 1px solid #163361 !important;
-          border-radius: 10px !important;
-          font-weight: 800 !important;
+          background:#163361 !important;
+          color:#ffffff !important;
+          border:1px solid #163361 !important;
+          border-radius:10px !important;
+          font-weight:800 !important;
         }
 
         div[data-testid="stDownloadButton"] > button:hover{
-          background: #0D1E3A !important;
-          border-color: #0D1E3A !important;
-          color: #ffffff !important;
+          background:#0D1E3A !important;
+          border-color:#0D1E3A !important;
+          color:#ffffff !important;
         }
 
         div[data-testid="stDownloadButton"] > button:active{
-          background: #0D1E3A !important;
-          border-color: #0D1E3A !important;
-          color: #ffffff !important;
+          background:#0D1E3A !important;
+          border-color:#0D1E3A !important;
+          color:#ffffff !important;
         }
 
         div[data-testid="stDownloadButton"] > button:disabled{
-          background: #e6e6e6 !important;
-          color: #777 !important;
-          border-color: #d0d0d0 !important;
+          background:#e6e6e6 !important;
+          color:#777 !important;
+          border-color:#d0d0d0 !important;
         }
 
         /* =========================================================
-           ✅ LABELS (Selectbox + MultiSelect) - PRETO
+           ✅ LABELS
         ========================================================= */
         div[data-testid="stSelectbox"] label,
         div[data-testid="stMultiSelect"] label{
-          color: #000 !important;
-          font-weight: 800 !important;
+          color:#000 !important;
+          font-weight:800 !important;
         }
         div[data-testid="stSelectbox"] label *,
         div[data-testid="stMultiSelect"] label *{
-          color: #000 !important;
-        }
-
-        /* =========================================================
-           ✅ MENU: TUDO PRETO (use junto com wrapper .menu-wrap)
-           - Se você envolver o menu com <div class="menu-wrap"> ... </div>
-           - garante texto preto em captions/alerts/qualquer coisa
-        ========================================================= */
-        .menu-wrap, .menu-wrap *{
-          color: #000 !important;
-          -webkit-text-fill-color: #000 !important;
-        }
-
-        /* manter texto do botão de download branco mesmo dentro do menu-wrap */
-        .menu-wrap div[data-testid="stDownloadButton"] > button,
-        .menu-wrap div[data-testid="stDownloadButton"] > button *{
-          color:#fff !important;
-          -webkit-text-fill-color:#fff !important;
-        }
-
-        /* placeholder cinza dentro do menu */
-        .menu-wrap div[data-testid="stSelectbox"] input::placeholder,
-        .menu-wrap div[data-testid="stMultiSelect"] input::placeholder,
-        .menu-wrap div[data-testid="stMultiSelect"] [class*="Placeholder"],
-        .menu-wrap div[data-testid="stMultiSelect"] [class*="placeholder"]{
-          color:#666 !important;
-          -webkit-text-fill-color:#666 !important;
-        }
-
-        /* tags do multiselect no menu */
-        .menu-wrap div[data-testid="stMultiSelect"] span[data-baseweb="tag"]{
-          background: #163361 !important;
-          border: 1px solid #163361 !important;
-        }
-        .menu-wrap div[data-testid="stMultiSelect"] span[data-baseweb="tag"],
-        .menu-wrap div[data-testid="stMultiSelect"] span[data-baseweb="tag"] *{
-          color: #ffffff !important;
-          -webkit-text-fill-color:#ffffff !important;
-          font-weight: 800 !important;
-        }
-        .menu-wrap div[data-testid="stMultiSelect"] span[data-baseweb="tag"] svg,
-        .menu-wrap div[data-testid="stMultiSelect"] span[data-baseweb="tag"] svg *{
-          fill: #ffffff !important;
-          stroke: #ffffff !important;
+          color:#000 !important;
         }
 
         </style>
         """,
         unsafe_allow_html=True,
     )
+
+    st.markdown('<meta name="color-scheme" content="light">', unsafe_allow_html=True)
 
     # reforço no head do browser (ajuda em alguns navegadores)
     st.markdown('<meta name="color-scheme" content="light">', unsafe_allow_html=True)
