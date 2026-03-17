@@ -2,13 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8594a7a3-20be-413a-98d4-b0bcad27feae" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Vulnerabilidade-Economica-no-Rio-Grande-do-Sul.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dados/Porto Alegre/Mancha/desktop.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Dados/Porto Alegre/Mancha/desktop.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dados/Rio Grande/Mancha/CEN_MAI2024.dbf" beforeDir="false" afterPath="$PROJECT_DIR$/Dados/Rio Grande/Mancha/CEN_MAI2024.dbf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dados/Rio Grande/Mancha/CEN_MAI24_MAIS60CM.dbf" beforeDir="false" afterPath="$PROJECT_DIR$/Dados/Rio Grande/Mancha/CEN_MAI24_MAIS60CM.dbf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dados/Rio Grande/Mancha/CEN_SET2023.dbf" beforeDir="false" afterPath="$PROJECT_DIR$/Dados/Rio Grande/Mancha/CEN_SET2023.dbf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Dados/Rio Grande/Mancha/desktop.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Dados/Rio Grande/Mancha/desktop.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dashboard.py" beforeDir="false" afterPath="$PROJECT_DIR$/Dashboard.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
