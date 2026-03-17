@@ -35,6 +35,11 @@ APP_DIR = Path(__file__).resolve().parent
 DATA_DIR = APP_DIR / "Dados"
 
 MUNICIPIOS_DATA = {
+    "Eldorado do Sul": {
+        "empresas": str(DATA_DIR / "Eldorado" / "Empresas.xlsx"),
+        "educacao": str(DATA_DIR / "Eldorado" / "Escolas.csv"),
+        "saude": str(DATA_DIR / "Eldorado" / "Saude.csv"),
+    },
     "Lajeado": {
         "empresas": str(DATA_DIR / "Lajeado" / "Empresas.xlsx"),
         "educacao": str(DATA_DIR / "Lajeado" / "Escolas.csv"),
@@ -53,6 +58,9 @@ MUNICIPIOS_DATA = {
 }
 
 CENARIOS = {
+    "Eldorado do Sul": {
+        "Cenário ADA": str(DATA_DIR / "Eldorado" / "Mancha" / "ADA Eldorado.shp"),
+    },
     "Lajeado": {
         "Cenário 27m": str(DATA_DIR / "Lajeado" / "Mancha" / "27m00cm.shp"),
         "Cenário 30m": str(DATA_DIR / "Lajeado" / "Mancha" / "30m00cm.shp"),
@@ -71,6 +79,7 @@ RS_CENTER = (-30.35, -53.35)
 RS_ZOOM = 6.5
 
 MUNICIPIO_VIEW = {
+    "Eldorado do Sul": {"center": (-30.0840, -51.6180), "zoom": 12},
     "Lajeado": {"center": (-29.4585, -51.9953), "zoom": 12.5},
     "Porto Alegre": {"center": (-30.1051, -51.1500), "zoom": 11},
     "Rio Grande": {"center": (-32.0650, -52.1200), "zoom": 12.5},
@@ -1789,7 +1798,7 @@ if st.session_state.selected_mun and st.session_state.selected_cenario:
         cenario_gdf = None
         show_delta = False
 
-title_total = st.session_state.selected_mun if st.session_state.selected_mun else "Lajeado + Porto Alegre + Rio Grande"
+title_total = st.session_state.selected_mun if st.session_state.selected_mun else "Eldorado do Sul + Lajeado + Porto Alegre + Rio Grande"
 
 # HITS
 emp_hits = edu_hits = sau_hits = None
