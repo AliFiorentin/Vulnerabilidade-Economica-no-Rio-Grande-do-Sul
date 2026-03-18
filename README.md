@@ -2,6 +2,8 @@
 
 **Dashboard interativo para análise de vulnerabilidade socioeconômica e exposição a desastres hidrológicos nos municípios de Eldordo do Sul, Porto Alegre e Rio Grande.**
 
+*Acesso:* https://vedh-rgs.streamlit.app/
+
 ------------------------------------------------------------------------
 
 ## Objetivo
