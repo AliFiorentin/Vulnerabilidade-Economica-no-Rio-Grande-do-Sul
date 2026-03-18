@@ -53,3 +53,9 @@ Este projeto segue as licenças e direitos conforme definidos pela instituição
 *Doutorando em Economia Aplicada*\
 *Universidade Federal do Rio Grande do Sul - UFRGS*\
 Contato: [alisson.fiorentin\@gmail.com](mailto:alisson.fiorentin@gmail.com)
+
+**Grupo de Pesquisa em Economia Azul**
+*Instituto de Ciências Econômicas, Administrativas e Contábeis* 
+*Universidade Federal do Rio Grande - FURG*
+*Av. Itália, KM 8, Rio Grande - RS*
+
