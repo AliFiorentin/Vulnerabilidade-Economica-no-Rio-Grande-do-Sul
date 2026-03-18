@@ -36,38 +36,6 @@ Este projeto tem como objetivo reunir, visualizar e explorar dados georreferenci
 -   **Geopandas, Pandas:** Manipulação de dados geoespaciais e tabulares.
 -   **Git Large File Storage (LFS):** Gerenciamento de arquivos grandes (.dbf, shapefiles).
 
-------------------------------------------------------------------------
-
-## Como executar
-
-1.  Instale as dependências listadas em `requirements.txt`:
-
-``` bash
-pip install -r requirements.txt
-```
-
-2.  Execute o dashboard pela linha de comando:
-
-``` bash
-streamlit run Dashboard.py
-```
-
-3.  Os dados devem ser organizados conforme os diretórios do projeto (`Dados/`, `.icons/`, etc.), conforme aparecem no código.\
-4.  Ou acesse a versão online pelo link: <https://vedh-rgs.streamlit.app/>
-
-------------------------------------------------------------------------
-
-## Estrutura dos diretórios
-
-```         
-.
-├── Dados/
-│   ├── *.dbf, *.shp, *.xlsx, *.qmd, ...   # Dados espaciais, tabulares, infraestrutura
-├── .icons/
-│   ├── *.png, *.datauri                  # Ícones customizados para visualização
-├── Dashboard.py                          # Dashboard principal
-└── requirements.txt                      # Dependências Python do projeto
-```
 
 ------------------------------------------------------------------------
 
